@@ -1,0 +1,47 @@
+import React from 'react';
+
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+} from 'react-router-dom';
+
+
+import {
+  PageHeader ,
+  Grid,
+  Row,
+  Col,
+} from 'react-bootstrap';
+
+import logo from '../humanoid.png';
+import './App.css';
+
+import { SearchForm } from '../components';
+
+import Sighting from '../Sighting';
+import Home from '../Home';
+
+export default ({ onSearch }) => {
+  return (
+    <Router>
+      <div className="container">
+      <PageHeader>
+        <Grid>
+          <Row>
+            <Col md={2}>
+              <img src={logo} height={100} width={100} alt="Ufo sightings" />
+            </Col>
+            <Col md={10}>
+              <h1><Link to="/">UFO sightings</Link></h1>
+            </Col>
+          </Row>
+        </Grid>
+        <SearchForm onSubmit={onSearch} />
+        </PageHeader>
+      <Route exact path="/" component={Home} />
+      <Route path="/:id" component={Sighting} />
+      </div>
+    </Router>
+  );
+};

@@ -1,0 +1,68 @@
+package api
+
+import (
+	"database/sql"
+	"github.com/danjac/sightings"
+	"github.com/pressly/chi/render"
+	"net/http"
+)
+
+type PageResponse struct {
+	*sightings.Page
+}
+
+func (resp *PageResponse) Render(w http.ResponseWriter, r *http.Request) error {
+	return nil
+}
+
+func NewPageResponse(page *sightings.Page) *PageResponse {
+	return &PageResponse{page}
+}
+
+type SightingResponse struct {
+	*sightings.Sighting
+}
+
+func (resp *SightingResponse) Render(w http.ResponseWriter, r *http.Request) error {
+	return nil
+}
+
+func NewSightingResponse(s *sightings.Sighting) *SightingResponse {
+	return &SightingResponse{s}
+}
+
+type ErrResponse struct {
+	Err            error `json:"-"` // low-level runtime error
+	HTTPStatusCode int   `json:"-"` // http response status code
+
+	StatusText string `json:"status"`          // user-level status message
+	AppCode    int64  `json:"code,omitempty"`  // application-specific error code
+	ErrorText  string `json:"error,omitempty"` // application-level error message, for debugging
+}
+
+func (e *ErrResponse) Render(w http.ResponseWriter, r *http.Request) error {
+	render.Status(r, e.HTTPStatusCode)
+	return nil
+}
+
+func ErrRender(err error) render.Renderer {
+	var (
+		statusCode int
+		statusText string
+	)
+	switch err {
+	case sql.ErrNoRows:
+		statusCode = http.StatusNotFound
+		statusText = "Page not found: cannot find this item"
+	default:
+		statusCode = http.StatusInternalServerError
+		statusText = "Error rendering response."
+	}
+
+	return &ErrResponse{
+		Err:            err,
+		HTTPStatusCode: statusCode,
+		StatusText:     statusText,
+		ErrorText:      err.Error(),
+	}
+}

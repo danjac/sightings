@@ -1,0 +1,12 @@
+package: github.com/danjac/sightings
+import:
+- package: github.com/rubenv/sql-migrate
+- package: github.com/lib/pq
+- package: github.com/spf13/viper
+- package: github.com/fsnotify/fsnotify
+  version: ^1.4.2
+- package: github.com/pressly/chi
+  version: ^2.1.0
+- package: github.com/goware/cors
+- package: github.com/Masterminds/squirrel
+- package: github.com/jmoiron/sqlx
