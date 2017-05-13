@@ -6,7 +6,6 @@
     "axios": "^0.16.1",
     "leaflet": "^1.0.3",
     "moment": "^2.18.1",
-    "momentjs": "^2.0.0",
     "query-string": "^4.3.4",
     "react": "^15.5.4",
     "react-bootstrap": "^0.31.0",
