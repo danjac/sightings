@@ -13,10 +13,10 @@ import (
 const sightingContextKey = "sighting"
 
 type Resource struct {
-	*config.Config
+	*config.AppConfig
 }
 
-func NewResource(cfg *config.Config) *Resource {
+func NewResource(cfg *config.AppConfig) *Resource {
 	return &Resource{cfg}
 }
 

@@ -8,7 +8,7 @@ import (
 	"github.com/pressly/chi/render"
 )
 
-func NewRouter(cfg *config.Config, prefix string) chi.Router {
+func NewRouter(cfg *config.AppConfig, prefix string) chi.Router {
 
 	r := chi.NewRouter()
 

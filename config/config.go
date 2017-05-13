@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-type Config struct {
+type AppConfig struct {
 	Store sightings.Store
 	Port  string
 }
@@ -21,11 +21,11 @@ func init() {
 	viper.SetDefault("port", "4000")
 }
 
-func Configure() (*Config, error) {
+func Configure() (*AppConfig, error) {
 
 	viper.AutomaticEnv()
 
-	cfg := &Config{}
+	cfg := &AppConfig{}
 
 	connection := fmt.Sprintf("dbname=%s user=%s password=%s host=%s sslmode=%s",
 		viper.Get("db_name"),

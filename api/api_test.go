@@ -11,7 +11,7 @@ import (
 
 func testRequest(
 	t *testing.T,
-	cfg *config.Config,
+	cfg *config.AppConfig,
 	method string,
 	url string,
 	expectedStatus int) *httptest.ResponseRecorder {
@@ -36,7 +36,7 @@ func testRequest(
 
 func TestGetSighting(t *testing.T) {
 
-	cfg := &config.Config{}
+	cfg := &config.AppConfig{}
 	cfg.Store = store.NewMockStore()
 
 	testRequest(t, cfg, "GET", "/api/sightings/1234", http.StatusOK)
@@ -48,7 +48,7 @@ func TestGetSightingNotFound(t *testing.T) {
 	mockStore.Sighting = nil
 	mockStore.Err = sql.ErrNoRows
 
-	cfg := &config.Config{}
+	cfg := &config.AppConfig{}
 	cfg.Store = mockStore
 
 	testRequest(t, cfg, "GET", "/api/sightings/1234", http.StatusNotFound)
@@ -56,7 +56,7 @@ func TestGetSightingNotFound(t *testing.T) {
 
 func TestListSightings(t *testing.T) {
 
-	cfg := &config.Config{}
+	cfg := &config.AppConfig{}
 	cfg.Store = store.NewMockStore()
 
 	testRequest(t, cfg, "GET", "/api/sightings", http.StatusOK)
