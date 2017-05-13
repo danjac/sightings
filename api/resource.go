@@ -3,7 +3,6 @@ package api
 import (
 	"context"
 	"github.com/danjac/sightings"
-	"github.com/danjac/sightings/config"
 	"github.com/pressly/chi"
 	"github.com/pressly/chi/render"
 	"net/http"
@@ -13,10 +12,10 @@ import (
 const sightingContextKey = "sighting"
 
 type Resource struct {
-	*config.AppConfig
+	*sightings.AppConfig
 }
 
-func NewResource(cfg *config.AppConfig) *Resource {
+func NewResource(cfg *sightings.AppConfig) *Resource {
 	return &Resource{cfg}
 }
 

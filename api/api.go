@@ -1,14 +1,14 @@
 package api
 
 import (
-	"github.com/danjac/sightings/config"
+	"github.com/danjac/sightings"
 	"github.com/goware/cors"
 	"github.com/pressly/chi"
 	"github.com/pressly/chi/middleware"
 	"github.com/pressly/chi/render"
 )
 
-func NewRouter(cfg *config.AppConfig, prefix string) chi.Router {
+func NewRouter(cfg *sightings.AppConfig, prefix string) chi.Router {
 
 	r := chi.NewRouter()
 

@@ -6,6 +6,11 @@ import (
 	"time"
 )
 
+type AppConfig struct {
+	Store Store
+	Port  string
+}
+
 type Page struct {
 	PageSize   int        `json:"pageSize"`
 	Number     int64      `json:"number"`
