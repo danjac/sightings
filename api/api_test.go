@@ -9,6 +9,24 @@ import (
 	"testing"
 )
 
+type mockReader struct {
+	sighting *sightings.Sighting
+	page     *sightings.Page
+	err      error
+}
+
+func (r *mockReader) GetOne(_ string) (*sightings.Sighting, error) {
+	return r.sighting, r.err
+}
+
+func (r *mockReader) Find(_ int64) (*sightings.Page, error) {
+	return r.page, r.err
+}
+
+func (r *mockReader) Search(_ string, _ int64) (*sightings.Page, error) {
+	return r.page, r.err
+}
+
 func testRequest(
 	t *testing.T,
 	cfg *sightings.AppConfig,
@@ -37,19 +55,25 @@ func testRequest(
 func TestGetSighting(t *testing.T) {
 
 	cfg := &sightings.AppConfig{}
-	cfg.Store = store.NewMockStore()
+	cfg.Store = &store.Store{
+		Reader: &mockReader{
+			sighting: &sightings.Sighting{},
+		},
+	}
 
 	testRequest(t, cfg, "GET", "/api/sightings/1234", http.StatusOK)
 }
 
 func TestGetSightingNotFound(t *testing.T) {
 
-	mockStore := store.NewMockStore()
-	mockStore.Sighting = nil
-	mockStore.Err = sql.ErrNoRows
-
 	cfg := &sightings.AppConfig{}
-	cfg.Store = mockStore
+
+	cfg.Store = &store.Store{
+		Reader: &mockReader{
+			sighting: nil,
+			err:      sql.ErrNoRows,
+		},
+	}
 
 	testRequest(t, cfg, "GET", "/api/sightings/1234", http.StatusNotFound)
 }
@@ -57,7 +81,11 @@ func TestGetSightingNotFound(t *testing.T) {
 func TestListSightings(t *testing.T) {
 
 	cfg := &sightings.AppConfig{}
-	cfg.Store = store.NewMockStore()
+	cfg.Store = &store.Store{
+		Reader: &mockReader{
+			page: &sightings.Page{},
+		},
+	}
 
 	testRequest(t, cfg, "GET", "/api/sightings", http.StatusOK)
 

@@ -1,6 +1,7 @@
 package store
 
 import (
+	"github.com/danjac/sightings"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 )
@@ -17,4 +18,18 @@ func Connect(connection string) (*DB, error) {
 
 	return newDB(db), nil
 
+}
+
+type Store struct {
+	sightings.Reader
+	sightings.Writer
+	sightings.Closer
+}
+
+func NewStore(db *DB) *Store {
+	return &Store{
+		Reader: &Reader{db},
+		Writer: &Writer{db},
+		Closer: db,
+	}
 }

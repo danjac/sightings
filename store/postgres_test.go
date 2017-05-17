@@ -77,7 +77,9 @@ func createSighting() *sightings.Sighting {
 		Duration:    "10 minutes",
 	}
 
-	if err := db.Insert(s); err != nil {
+	w := &Writer{db}
+
+	if err := w.Insert(s); err != nil {
 		panic(err)
 	}
 
@@ -87,7 +89,9 @@ func createSighting() *sightings.Sighting {
 func TestGetOneIfNone(t *testing.T) {
 	truncateDB()
 
-	s, err := db.GetOne("1234")
+	r := &Reader{db}
+
+	s, err := r.GetOne("1234")
 	if err == nil || s != nil {
 		t.Fatal("Should fail here")
 	}
@@ -99,7 +103,9 @@ func TestGetOne(t *testing.T) {
 
 	fixture := createSighting()
 
-	s, err := db.GetOne(strconv.Itoa(int(fixture.ID)))
+	r := &Reader{db}
+
+	s, err := r.GetOne(strconv.Itoa(int(fixture.ID)))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -110,7 +116,7 @@ func TestGetOne(t *testing.T) {
 
 }
 
-func TestGetAll(t *testing.T) {
+func TestFind(t *testing.T) {
 	truncateDB()
 
 	numRows := 3
@@ -119,7 +125,9 @@ func TestGetAll(t *testing.T) {
 		createSighting()
 	}
 
-	page, err := db.GetAll(1)
+	r := &Reader{db}
+
+	page, err := r.Find(1)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -138,7 +146,9 @@ func TestSearch(t *testing.T) {
 		createSighting()
 	}
 
-	page, err := db.Search("iowa", 1)
+	r := &Reader{db}
+
+	page, err := r.Search("iowa", 1)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -163,7 +173,9 @@ func TestInsert(t *testing.T) {
 		Duration:    "10 minutes",
 	}
 
-	if err := db.Insert(s); err != nil {
+	w := &Writer{db}
+
+	if err := w.Insert(s); err != nil {
 		t.Fatal(err)
 	}
 

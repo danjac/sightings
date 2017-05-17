@@ -35,7 +35,7 @@ func Configure() (*sightings.AppConfig, error) {
 		return nil, err
 	}
 
-	cfg.Store = db
+	cfg.Store = store.NewStore(db)
 
 	cfg.Port = viper.GetString("port")
 

@@ -21,9 +21,13 @@ func newDB(db *sqlx.DB) *DB {
 	return &DB{db, builder}
 }
 
-func (db *DB) GetOne(id string) (*sightings.Sighting, error) {
+type Reader struct {
+	*DB
+}
 
-	sql, args, err := db.sq.
+func (r *Reader) GetOne(id string) (*sightings.Sighting, error) {
+
+	sql, args, err := r.sq.
 		Select("*").
 		From("sightings").
 		Where(sq.Eq{"id": id}).
@@ -35,27 +39,27 @@ func (db *DB) GetOne(id string) (*sightings.Sighting, error) {
 
 	s := &sightings.Sighting{}
 
-	if err := db.Get(s, sql, args...); err != nil {
+	if err := r.Get(s, sql, args...); err != nil {
 		return nil, err
 	}
 
 	return s, nil
 }
 
-func (db *DB) GetAll(pageNumber int64) (*sightings.Page, error) {
-	countQuery := db.sq.
+func (r *Reader) Find(pageNumber int64) (*sightings.Page, error) {
+	countQuery := r.sq.
 		Select("COUNT(id)").
 		From("sightings")
 
-	selectQuery := db.sq.
+	selectQuery := r.sq.
 		Select("*").
 		From("sightings").
 		OrderBy("occurred_at DESC")
 
-	return db.paginate(countQuery, selectQuery, pageNumber)
+	return r.paginate(countQuery, selectQuery, pageNumber)
 }
 
-func (db *DB) Search(search string, pageNumber int64) (*sightings.Page, error) {
+func (r *Reader) Search(search string, pageNumber int64) (*sightings.Page, error) {
 
 	q := "%" + search + "%"
 	cols := []string{"location", "shape", "description"}
@@ -68,49 +72,21 @@ func (db *DB) Search(search string, pageNumber int64) (*sightings.Page, error) {
 
 	where := sq.Or(clauses)
 
-	countQuery := db.sq.
+	countQuery := r.sq.
 		Select("COUNT(id)").
 		From("sightings").
 		Where(where)
 
-	selectQuery := db.sq.
+	selectQuery := r.sq.
 		Select("*").
 		From("sightings").
 		Where(where).
 		OrderBy("occurred_at DESC")
 
-	return db.paginate(countQuery, selectQuery, pageNumber)
+	return r.paginate(countQuery, selectQuery, pageNumber)
 }
 
-func (db *DB) Insert(s *sightings.Sighting) error {
-
-	q := db.sq.
-		Insert("sightings").
-		Columns(
-			"occurred_at",
-			"reported_at",
-			"description",
-			"shape",
-			"duration",
-			"location",
-			"latitude",
-			"longitude").
-		Values(
-			s.OccurredAt,
-			s.ReportedAt,
-			s.Description,
-			s.Shape,
-			s.Duration,
-			s.Location,
-			s.Latitude,
-			s.Longitude).
-		Suffix("RETURNING \"id\"")
-
-	return q.QueryRow().Scan(&s.ID)
-
-}
-
-func (db *DB) paginate(countQuery sq.SelectBuilder,
+func (r *Reader) paginate(countQuery sq.SelectBuilder,
 	selectQuery sq.SelectBuilder,
 	pageNumber int64) (*sightings.Page, error) {
 
@@ -135,9 +111,40 @@ func (db *DB) paginate(countQuery sq.SelectBuilder,
 		return nil, err
 	}
 
-	if err := db.Select(&page.Sightings, sql, args...); err != nil {
+	if err := r.Select(&page.Sightings, sql, args...); err != nil {
 		return nil, err
 	}
 
 	return page, nil
+}
+
+type Writer struct {
+	*DB
+}
+
+func (w *Writer) Insert(s *sightings.Sighting) error {
+	q := w.sq.
+		Insert("sightings").
+		Columns(
+			"occurred_at",
+			"reported_at",
+			"description",
+			"shape",
+			"duration",
+			"location",
+			"latitude",
+			"longitude").
+		Values(
+			s.OccurredAt,
+			s.ReportedAt,
+			s.Description,
+			s.Shape,
+			s.Duration,
+			s.Location,
+			s.Latitude,
+			s.Longitude).
+		Suffix("RETURNING \"id\"")
+
+	return q.QueryRow().Scan(&s.ID)
+
 }

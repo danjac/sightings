@@ -71,7 +71,7 @@ func (rs *Resource) List(w http.ResponseWriter, r *http.Request) {
 	search := r.URL.Query().Get("s")
 
 	if search == "" {
-		page, err = rs.Store.GetAll(pageNumber)
+		page, err = rs.Store.Find(pageNumber)
 	} else {
 		page, err = rs.Store.Search(search, pageNumber)
 	}

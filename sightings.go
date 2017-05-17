@@ -11,6 +11,10 @@ type AppConfig struct {
 	Port  string
 }
 
+func (cfg *AppConfig) Close() error {
+	return cfg.Store.Close()
+}
+
 type Page struct {
 	PageSize   int        `json:"pageSize"`
 	Number     int64      `json:"number"`
@@ -45,26 +49,42 @@ func (s *Sighting) String() string {
 }
 
 // Inserts a sighting into the database
-func (s *Sighting) Insert(inserter Inserter) error {
-	return inserter.Insert(s)
+func (s *Sighting) Insert(i Inserter) error {
+	return i.Insert(s)
 }
 
 type Inserter interface {
 	Insert(*Sighting) error
 }
 
+type Writer interface {
+	Inserter
+}
+
+type Finder interface {
+	Find(int64) (*Page, error)
+}
+
+type Getter interface {
+	GetOne(string) (*Sighting, error)
+}
+
+type Searcher interface {
+	Search(string, int64) (*Page, error)
+}
+
+type Reader interface {
+	Finder
+	Getter
+	Searcher
+}
+
 type Closer interface {
 	Close() error
 }
 
-type Finder interface {
-	GetAll(int64) (*Page, error)
-	GetOne(string) (*Sighting, error)
-	Search(string, int64) (*Page, error)
-}
-
 type Store interface {
-	Inserter
-	Finder
+	Reader
+	Writer
 	Closer
 }
