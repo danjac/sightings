@@ -5,10 +5,10 @@ import { withRouter } from 'react-router-dom';
 
 import { fetchSighting } from '../store/actions';
 
-import Presenter from './presenter';
+import Sighting from './Sighting';
 
 
-class Sighting extends Component {
+class Container extends Component {
 
   fetchSighting(props) {
     this.props.onFetchSighting(props.match.params.id);
@@ -25,7 +25,7 @@ class Sighting extends Component {
   }
 
   render() {
-    return <Presenter {...this.props} />;
+    return <Sighting {...this.props} />;
   }
 }
 
@@ -38,6 +38,6 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(Sighting)
+  connect(mapStateToProps, mapDispatchToProps)(Container)
 );
 

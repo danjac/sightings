@@ -5,9 +5,9 @@ import { withRouter } from 'react-router-dom';
 
 import { fetchSightings } from '../store/actions';
 
-import Presenter from './presenter';
+import Home from './Home';
 
-class Home extends Component {
+class Container extends Component {
   fetchPage(props) {
     this.props.onFetchSightings(props.location.search);
   }
@@ -23,7 +23,7 @@ class Home extends Component {
   }
 
   render() {
-    return <Presenter {...this.props} />;
+    return <Home {...this.props} />;
   }
 }
 
@@ -36,6 +36,6 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(Home)
+  connect(mapStateToProps, mapDispatchToProps)(Container)
 );
 

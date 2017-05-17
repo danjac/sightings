@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-import Presenter from './presenter';
+import App from './App';
 
-class App extends Component {
+class Container extends Component {
 
   constructor(props) {
     super(props);
@@ -14,9 +14,9 @@ class App extends Component {
   }
 
   render() {
-    return <Presenter onSearch={this.handleSearch} />
+    return <App onSearch={this.handleSearch} />
   }
 
 }
 
-export default App;
+export default Container;
