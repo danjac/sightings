@@ -30,13 +30,12 @@ it('fetches an invalid sighting', () => {
 
   const result = {
     type: FETCH_SIGHTING_FAILURE,
-    error: true,
+    payload: 'error',
   };
 
   const gen = fetchSighting({ payload: 100 });
 
   expect(gen.next().value).toMatchObject(call(api.getSighting, 100));
-  // response.data undefined
-  expect(gen.next().value).toMatchObject(put(result));
+  expect(gen.throw('error').value).toMatchObject(put(result));
 
 });
