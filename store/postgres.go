@@ -1,7 +1,6 @@
 package store
 
 import (
-	"fmt"
 	sq "github.com/Masterminds/squirrel"
 	"github.com/danjac/sightings/models"
 	"github.com/jmoiron/sqlx"
@@ -61,16 +60,7 @@ func (r *DBReader) Find(pageNumber int64) (*models.Page, error) {
 
 func (r *DBReader) Search(search string, pageNumber int64) (*models.Page, error) {
 
-	q := "%" + search + "%"
-	cols := []string{"location", "shape", "description"}
-
-	clauses := []sq.Sqlizer{}
-
-	for _, col := range cols {
-		clauses = append(clauses, sq.Expr(fmt.Sprintf("%s ILIKE ?", col), q))
-	}
-
-	where := sq.Or(clauses)
+	where := sq.Expr("tsv @@ plainto_tsquery(?)", search)
 
 	countQuery := r.sq.
 		Select("COUNT(id)").

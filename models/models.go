@@ -1,6 +1,7 @@
 package models
 
 import (
+	"database/sql"
 	"fmt"
 	"strings"
 	"time"
@@ -15,15 +16,16 @@ type Page struct {
 }
 
 type Sighting struct {
-	ID          int64     `db:"id" json:"id"`
-	OccurredAt  time.Time `db:"occurred_at" json:"occurredAt"`
-	ReportedAt  time.Time `db:"reported_at" json:"reportedAt"`
-	Description string    `db:"description" json:"description"`
-	Shape       string    `db:"shape" json:"shape"`
-	Location    string    `db:"location" json:"location"`
-	Duration    string    `db:"duration" json:"duration"`
-	Latitude    float64   `db:"latitude" json:"latitude"`
-	Longitude   float64   `db:"longitude" json:"longitude"`
+	ID          int64          `db:"id" json:"id"`
+	OccurredAt  time.Time      `db:"occurred_at" json:"occurredAt"`
+	ReportedAt  time.Time      `db:"reported_at" json:"reportedAt"`
+	Description string         `db:"description" json:"description"`
+	Shape       string         `db:"shape" json:"shape"`
+	Location    string         `db:"location" json:"location"`
+	Duration    string         `db:"duration" json:"duration"`
+	Latitude    float64        `db:"latitude" json:"latitude"`
+	Longitude   float64        `db:"longitude" json:"longitude"`
+	TSV         sql.NullString `db:"tsv" json:"-"`
 }
 
 // Print human-readable of sighting info
