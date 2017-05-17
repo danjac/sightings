@@ -6,7 +6,6 @@ import (
 	"github.com/rubenv/sql-migrate"
 	"github.com/spf13/viper"
 	"os"
-	"strconv"
 	"testing"
 	"time"
 )
@@ -86,26 +85,26 @@ func createSighting() *models.Sighting {
 	return s
 }
 
-func TestGetOneIfNone(t *testing.T) {
+func TestGetIfNone(t *testing.T) {
 	truncateDB()
 
 	r := &DBReader{db}
 
-	s, err := r.GetOne("1234")
+	s, err := r.Get(1234)
 	if err == nil || s != nil {
 		t.Fatal("Should fail here")
 	}
 
 }
 
-func TestGetOne(t *testing.T) {
+func TestGet(t *testing.T) {
 	truncateDB()
 
 	fixture := createSighting()
 
 	r := &DBReader{db}
 
-	s, err := r.GetOne(strconv.Itoa(int(fixture.ID)))
+	s, err := r.Get(fixture.ID)
 	if err != nil {
 		t.Fatal(err)
 	}

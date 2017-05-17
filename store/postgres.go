@@ -25,7 +25,7 @@ type DBReader struct {
 	*DB
 }
 
-func (r *DBReader) GetOne(id string) (*models.Sighting, error) {
+func (r *DBReader) Get(id int64) (*models.Sighting, error) {
 
 	sql, args, err := r.sq.
 		Select("*").
@@ -39,7 +39,7 @@ func (r *DBReader) GetOne(id string) (*models.Sighting, error) {
 
 	s := &models.Sighting{}
 
-	if err := r.Get(s, sql, args...); err != nil {
+	if err := r.DB.Get(s, sql, args...); err != nil {
 		return nil, err
 	}
 

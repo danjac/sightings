@@ -33,7 +33,7 @@ type Finder interface {
 }
 
 type Getter interface {
-	GetOne(string) (*models.Sighting, error)
+	Get(int64) (*models.Sighting, error)
 }
 
 type Searcher interface {

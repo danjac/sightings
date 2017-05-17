@@ -43,13 +43,17 @@ func (rs *Resource) Routes() chi.Router {
 
 func (rs *Resource) WithSighting(next http.Handler) http.Handler {
 	return handle(func(w http.ResponseWriter, r *http.Request) error {
-		id := chi.URLParam(r, "id")
 
-		if _, err := strconv.ParseInt(id, 10, 64); err != nil {
+		var (
+			id  int64
+			err error
+		)
+
+		if id, err = strconv.ParseInt(chi.URLParam(r, "id"), 10, 64); err != nil {
 			return invalidRoute
 		}
 
-		s, err := rs.Store.GetOne(id)
+		s, err := rs.Store.Get(id)
 
 		if err != nil {
 			return err

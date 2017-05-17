@@ -16,7 +16,7 @@ type mockReader struct {
 	err      error
 }
 
-func (r *mockReader) GetOne(_ string) (*models.Sighting, error) {
+func (r *mockReader) Get(_ int64) (*models.Sighting, error) {
 	return r.sighting, r.err
 }
 
