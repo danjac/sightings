@@ -26,7 +26,7 @@ type Store struct {
 	sightings.Closer
 }
 
-func NewStore(db *DB) *Store {
+func NewStore(db *DB) sightings.Store {
 	return &Store{
 		Reader: &Reader{db},
 		Writer: &Writer{db},
