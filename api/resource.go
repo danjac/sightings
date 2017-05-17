@@ -47,7 +47,7 @@ func (rs *Resource) WithSighting(next http.Handler) http.Handler {
 		s, err := rs.Store.GetOne(id)
 
 		if err != nil {
-			rs.Error(w, r, err)
+			render.Render(w, r, ErrRender(err))
 			return
 		}
 
@@ -78,11 +78,14 @@ func (rs *Resource) List(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err != nil {
-		rs.Error(w, r, err)
+		render.Render(w, r, ErrRender(err))
 		return
 	}
 
-	rs.Render(w, r, NewPageResponse(page))
+	if err := render.Render(w, r, NewPageResponse(page)); err != nil {
+		render.Render(w, r, ErrRender(err))
+	}
+
 }
 
 func (rs *Resource) Get(w http.ResponseWriter, r *http.Request) {
@@ -94,17 +97,10 @@ func (rs *Resource) Get(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rs.Render(w, r, NewSightingResponse(s))
-}
-
-func (rs *Resource) Error(w http.ResponseWriter, r *http.Request, err error) {
-	render.Render(w, r, ErrRender(err))
-}
-
-func (rs *Resource) Render(w http.ResponseWriter, r *http.Request, renderer render.Renderer) {
-	if err := render.Render(w, r, renderer); err != nil {
-		rs.Error(w, r, err)
+	if err := render.Render(w, r, NewSightingResponse(s)); err != nil {
+		render.Render(w, r, ErrRender(err))
 	}
+
 }
 
 func newContext(ctx context.Context, s *models.Sighting) context.Context {
