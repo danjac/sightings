@@ -2,32 +2,32 @@ package api
 
 import (
 	"database/sql"
-	"github.com/danjac/sightings"
+	"github.com/danjac/sightings/models"
 	"github.com/pressly/chi/render"
 	"net/http"
 )
 
 type PageResponse struct {
-	*sightings.Page
+	*models.Page
 }
 
 func (resp *PageResponse) Render(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
-func NewPageResponse(page *sightings.Page) *PageResponse {
+func NewPageResponse(page *models.Page) *PageResponse {
 	return &PageResponse{page}
 }
 
 type SightingResponse struct {
-	*sightings.Sighting
+	*models.Sighting
 }
 
 func (resp *SightingResponse) Render(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
-func NewSightingResponse(s *sightings.Sighting) *SightingResponse {
+func NewSightingResponse(s *models.Sighting) *SightingResponse {
 	return &SightingResponse{s}
 }
 

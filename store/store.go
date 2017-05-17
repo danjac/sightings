@@ -1,7 +1,7 @@
 package store
 
 import (
-	"github.com/danjac/sightings"
+	"github.com/danjac/sightings/models"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 )
@@ -20,16 +20,52 @@ func Connect(connection string) (*DB, error) {
 
 }
 
-type Store struct {
-	sightings.Reader
-	sightings.Writer
-	sightings.Closer
+type Inserter interface {
+	Insert(*models.Sighting) error
 }
 
-func NewStore(db *DB) sightings.Store {
-	return &Store{
-		Reader: &Reader{db},
-		Writer: &Writer{db},
+type Writer interface {
+	Inserter
+}
+
+type Finder interface {
+	Find(int64) (*models.Page, error)
+}
+
+type Getter interface {
+	GetOne(string) (*models.Sighting, error)
+}
+
+type Searcher interface {
+	Search(string, int64) (*models.Page, error)
+}
+
+type Reader interface {
+	Finder
+	Getter
+	Searcher
+}
+
+type Closer interface {
+	Close() error
+}
+
+type Store interface {
+	Reader
+	Writer
+	Closer
+}
+
+type DBStore struct {
+	Reader
+	Writer
+	Closer
+}
+
+func NewStore(db *DB) Store {
+	return &DBStore{
+		Reader: &DBReader{db},
+		Writer: &DBWriter{db},
 		Closer: db,
 	}
 }

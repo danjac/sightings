@@ -2,7 +2,7 @@ package store
 
 import (
 	"fmt"
-	"github.com/danjac/sightings"
+	"github.com/danjac/sightings/models"
 	"github.com/rubenv/sql-migrate"
 	"github.com/spf13/viper"
 	"os"
@@ -65,8 +65,8 @@ func truncateDB() {
 	}
 }
 
-func createSighting() *sightings.Sighting {
-	s := &sightings.Sighting{
+func createSighting() *models.Sighting {
+	s := &models.Sighting{
 		OccurredAt:  time.Now(),
 		ReportedAt:  time.Now(),
 		Location:    "Iowa City, IA",
@@ -77,7 +77,7 @@ func createSighting() *sightings.Sighting {
 		Duration:    "10 minutes",
 	}
 
-	w := &Writer{db}
+	w := &DBWriter{db}
 
 	if err := w.Insert(s); err != nil {
 		panic(err)
@@ -89,7 +89,7 @@ func createSighting() *sightings.Sighting {
 func TestGetOneIfNone(t *testing.T) {
 	truncateDB()
 
-	r := &Reader{db}
+	r := &DBReader{db}
 
 	s, err := r.GetOne("1234")
 	if err == nil || s != nil {
@@ -103,7 +103,7 @@ func TestGetOne(t *testing.T) {
 
 	fixture := createSighting()
 
-	r := &Reader{db}
+	r := &DBReader{db}
 
 	s, err := r.GetOne(strconv.Itoa(int(fixture.ID)))
 	if err != nil {
@@ -125,7 +125,7 @@ func TestFind(t *testing.T) {
 		createSighting()
 	}
 
-	r := &Reader{db}
+	r := &DBReader{db}
 
 	page, err := r.Find(1)
 	if err != nil {
@@ -146,7 +146,7 @@ func TestSearch(t *testing.T) {
 		createSighting()
 	}
 
-	r := &Reader{db}
+	r := &DBReader{db}
 
 	page, err := r.Search("iowa", 1)
 	if err != nil {
@@ -162,7 +162,7 @@ func TestInsert(t *testing.T) {
 
 	truncateDB()
 
-	s := &sightings.Sighting{
+	s := &models.Sighting{
 		OccurredAt:  time.Now(),
 		ReportedAt:  time.Now(),
 		Location:    "Iowa City, IA",
@@ -173,7 +173,7 @@ func TestInsert(t *testing.T) {
 		Duration:    "10 minutes",
 	}
 
-	w := &Writer{db}
+	w := &DBWriter{db}
 
 	if err := w.Insert(s); err != nil {
 		t.Fatal(err)

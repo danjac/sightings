@@ -3,7 +3,7 @@ package store
 import (
 	"fmt"
 	sq "github.com/Masterminds/squirrel"
-	"github.com/danjac/sightings"
+	"github.com/danjac/sightings/models"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -21,11 +21,11 @@ func newDB(db *sqlx.DB) *DB {
 	return &DB{db, builder}
 }
 
-type Reader struct {
+type DBReader struct {
 	*DB
 }
 
-func (r *Reader) GetOne(id string) (*sightings.Sighting, error) {
+func (r *DBReader) GetOne(id string) (*models.Sighting, error) {
 
 	sql, args, err := r.sq.
 		Select("*").
@@ -37,7 +37,7 @@ func (r *Reader) GetOne(id string) (*sightings.Sighting, error) {
 		return nil, err
 	}
 
-	s := &sightings.Sighting{}
+	s := &models.Sighting{}
 
 	if err := r.Get(s, sql, args...); err != nil {
 		return nil, err
@@ -46,7 +46,7 @@ func (r *Reader) GetOne(id string) (*sightings.Sighting, error) {
 	return s, nil
 }
 
-func (r *Reader) Find(pageNumber int64) (*sightings.Page, error) {
+func (r *DBReader) Find(pageNumber int64) (*models.Page, error) {
 	countQuery := r.sq.
 		Select("COUNT(id)").
 		From("sightings")
@@ -59,7 +59,7 @@ func (r *Reader) Find(pageNumber int64) (*sightings.Page, error) {
 	return r.paginate(countQuery, selectQuery, pageNumber)
 }
 
-func (r *Reader) Search(search string, pageNumber int64) (*sightings.Page, error) {
+func (r *DBReader) Search(search string, pageNumber int64) (*models.Page, error) {
 
 	q := "%" + search + "%"
 	cols := []string{"location", "shape", "description"}
@@ -86,11 +86,11 @@ func (r *Reader) Search(search string, pageNumber int64) (*sightings.Page, error
 	return r.paginate(countQuery, selectQuery, pageNumber)
 }
 
-func (r *Reader) paginate(countQuery sq.SelectBuilder,
+func (r *DBReader) paginate(countQuery sq.SelectBuilder,
 	selectQuery sq.SelectBuilder,
-	pageNumber int64) (*sightings.Page, error) {
+	pageNumber int64) (*models.Page, error) {
 
-	page := &sightings.Page{Number: pageNumber, PageSize: pageSize}
+	page := &models.Page{Number: pageNumber, PageSize: pageSize}
 
 	if err := countQuery.
 		QueryRow().
@@ -118,11 +118,11 @@ func (r *Reader) paginate(countQuery sq.SelectBuilder,
 	return page, nil
 }
 
-type Writer struct {
+type DBWriter struct {
 	*DB
 }
 
-func (w *Writer) Insert(s *sightings.Sighting) error {
+func (w *DBWriter) Insert(s *models.Sighting) error {
 	q := w.sq.
 		Insert("sightings").
 		Columns(

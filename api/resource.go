@@ -2,7 +2,8 @@ package api
 
 import (
 	"context"
-	"github.com/danjac/sightings"
+	"github.com/danjac/sightings/config"
+	"github.com/danjac/sightings/models"
 	"github.com/pressly/chi"
 	"github.com/pressly/chi/render"
 	"net/http"
@@ -12,10 +13,10 @@ import (
 const sightingContextKey = "sighting"
 
 type Resource struct {
-	*sightings.AppConfig
+	*config.AppConfig
 }
 
-func NewResource(cfg *sightings.AppConfig) *Resource {
+func NewResource(cfg *config.AppConfig) *Resource {
 	return &Resource{cfg}
 }
 
@@ -57,7 +58,7 @@ func (rs *Resource) WithSighting(next http.Handler) http.Handler {
 func (rs *Resource) List(w http.ResponseWriter, r *http.Request) {
 
 	var (
-		page       *sightings.Page
+		page       *models.Page
 		pageNumber int64
 		err        error
 	)
@@ -106,11 +107,11 @@ func (rs *Resource) Render(w http.ResponseWriter, r *http.Request, renderer rend
 	}
 }
 
-func newContext(ctx context.Context, s *sightings.Sighting) context.Context {
+func newContext(ctx context.Context, s *models.Sighting) context.Context {
 	return context.WithValue(ctx, sightingContextKey, s)
 }
 
-func fromContext(ctx context.Context) (*sightings.Sighting, bool) {
-	s, ok := ctx.Value(sightingContextKey).(*sightings.Sighting)
+func fromContext(ctx context.Context) (*models.Sighting, bool) {
+	s, ok := ctx.Value(sightingContextKey).(*models.Sighting)
 	return s, ok
 }

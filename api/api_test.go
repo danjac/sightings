@@ -2,7 +2,8 @@ package api
 
 import (
 	"database/sql"
-	"github.com/danjac/sightings"
+	"github.com/danjac/sightings/config"
+	"github.com/danjac/sightings/models"
 	"github.com/danjac/sightings/store"
 	"net/http"
 	"net/http/httptest"
@@ -10,26 +11,26 @@ import (
 )
 
 type mockReader struct {
-	sighting *sightings.Sighting
-	page     *sightings.Page
+	sighting *models.Sighting
+	page     *models.Page
 	err      error
 }
 
-func (r *mockReader) GetOne(_ string) (*sightings.Sighting, error) {
+func (r *mockReader) GetOne(_ string) (*models.Sighting, error) {
 	return r.sighting, r.err
 }
 
-func (r *mockReader) Find(_ int64) (*sightings.Page, error) {
+func (r *mockReader) Find(_ int64) (*models.Page, error) {
 	return r.page, r.err
 }
 
-func (r *mockReader) Search(_ string, _ int64) (*sightings.Page, error) {
+func (r *mockReader) Search(_ string, _ int64) (*models.Page, error) {
 	return r.page, r.err
 }
 
 func testRequest(
 	t *testing.T,
-	cfg *sightings.AppConfig,
+	cfg *config.AppConfig,
 	method string,
 	url string,
 	expectedStatus int) *httptest.ResponseRecorder {
@@ -54,10 +55,10 @@ func testRequest(
 
 func TestGetSighting(t *testing.T) {
 
-	cfg := &sightings.AppConfig{}
-	cfg.Store = &store.Store{
+	cfg := &config.AppConfig{}
+	cfg.Store = &store.DBStore{
 		Reader: &mockReader{
-			sighting: &sightings.Sighting{},
+			sighting: &models.Sighting{},
 		},
 	}
 
@@ -66,9 +67,9 @@ func TestGetSighting(t *testing.T) {
 
 func TestGetSightingNotFound(t *testing.T) {
 
-	cfg := &sightings.AppConfig{}
+	cfg := &config.AppConfig{}
 
-	cfg.Store = &store.Store{
+	cfg.Store = &store.DBStore{
 		Reader: &mockReader{
 			sighting: nil,
 			err:      sql.ErrNoRows,
@@ -80,10 +81,10 @@ func TestGetSightingNotFound(t *testing.T) {
 
 func TestListSightings(t *testing.T) {
 
-	cfg := &sightings.AppConfig{}
-	cfg.Store = &store.Store{
+	cfg := &config.AppConfig{}
+	cfg.Store = &store.DBStore{
 		Reader: &mockReader{
-			page: &sightings.Page{},
+			page: &models.Page{},
 		},
 	}
 

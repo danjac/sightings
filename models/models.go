@@ -1,19 +1,10 @@
-package sightings
+package models
 
 import (
 	"fmt"
 	"strings"
 	"time"
 )
-
-type AppConfig struct {
-	Store Store
-	Port  string
-}
-
-func (cfg *AppConfig) Close() error {
-	return cfg.Store.Close()
-}
 
 type Page struct {
 	PageSize   int        `json:"pageSize"`
@@ -46,45 +37,4 @@ func (s *Sighting) String() string {
 		fmt.Sprintf("Duration:\t\t %s", s.Duration),
 		s.Description,
 	}, "\n")
-}
-
-// Inserts a sighting into the database
-func (s *Sighting) Insert(i Inserter) error {
-	return i.Insert(s)
-}
-
-type Inserter interface {
-	Insert(*Sighting) error
-}
-
-type Writer interface {
-	Inserter
-}
-
-type Finder interface {
-	Find(int64) (*Page, error)
-}
-
-type Getter interface {
-	GetOne(string) (*Sighting, error)
-}
-
-type Searcher interface {
-	Search(string, int64) (*Page, error)
-}
-
-type Reader interface {
-	Finder
-	Getter
-	Searcher
-}
-
-type Closer interface {
-	Close() error
-}
-
-type Store interface {
-	Reader
-	Writer
-	Closer
 }

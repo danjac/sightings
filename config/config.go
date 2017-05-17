@@ -2,7 +2,6 @@ package config
 
 import (
 	"fmt"
-	"github.com/danjac/sightings"
 	"github.com/danjac/sightings/store"
 	"github.com/spf13/viper"
 )
@@ -16,11 +15,20 @@ func init() {
 	viper.SetDefault("port", "4000")
 }
 
-func Configure() (*sightings.AppConfig, error) {
+type AppConfig struct {
+	Store store.Store
+	Port  string
+}
+
+func (cfg *AppConfig) Close() error {
+	return cfg.Store.Close()
+}
+
+func Configure() (*AppConfig, error) {
 
 	viper.AutomaticEnv()
 
-	cfg := &sightings.AppConfig{}
+	cfg := &AppConfig{}
 
 	connection := fmt.Sprintf("dbname=%s user=%s password=%s host=%s sslmode=%s",
 		viper.Get("db_name"),
