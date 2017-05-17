@@ -51,6 +51,12 @@ func ErrRender(err error) render.Renderer {
 		statusText string
 	)
 	switch err {
+	case invalidRoute:
+		statusCode = http.StatusNotFound
+		statusText = http.StatusText(http.StatusNotFound)
+	case missingContext:
+		statusCode = http.StatusUnprocessableEntity
+		statusText = http.StatusText(http.StatusUnprocessableEntity)
 	case sql.ErrNoRows:
 		statusCode = http.StatusNotFound
 		statusText = "Page not found: cannot find this item"

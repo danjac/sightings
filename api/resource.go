@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"errors"
 	"github.com/danjac/sightings/config"
 	"github.com/danjac/sightings/models"
 	"github.com/pressly/chi"
@@ -10,11 +11,16 @@ import (
 	"strconv"
 )
 
+var invalidRoute = errors.New("Invalid route")
+var missingContext = errors.New("Unprocessable entity")
+
 const sightingContextKey = "sighting"
 
 type Resource struct {
 	*config.AppConfig
 }
+
+type HandlerFunc func(w http.ResponseWriter, r *http.Request) error
 
 func NewResource(cfg *config.AppConfig) *Resource {
 	return &Resource{cfg}
@@ -24,11 +30,11 @@ func (rs *Resource) Routes() chi.Router {
 
 	r := chi.NewRouter()
 
-	r.Get("/", rs.List)
+	r.Get("/", handle(rs.List))
 
 	r.With(rs.WithSighting).
 		Route("/:id", func(r chi.Router) {
-			r.Get("/", rs.Get)
+			r.Get("/", handle(rs.Get))
 			// delete, update....
 		})
 
@@ -40,7 +46,7 @@ func (rs *Resource) WithSighting(next http.Handler) http.Handler {
 		id := chi.URLParam(r, "id")
 
 		if _, err := strconv.ParseInt(id, 10, 64); err != nil {
-			http.Error(w, http.StatusText(404), 404)
+			render.Render(w, r, ErrRender(invalidRoute))
 			return
 		}
 
@@ -55,7 +61,7 @@ func (rs *Resource) WithSighting(next http.Handler) http.Handler {
 	})
 }
 
-func (rs *Resource) List(w http.ResponseWriter, r *http.Request) {
+func (rs *Resource) List(w http.ResponseWriter, r *http.Request) error {
 
 	var (
 		page       *models.Page
@@ -78,29 +84,32 @@ func (rs *Resource) List(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err != nil {
-		render.Render(w, r, ErrRender(err))
-		return
+		return err
 	}
 
-	if err := render.Render(w, r, NewPageResponse(page)); err != nil {
-		render.Render(w, r, ErrRender(err))
-	}
+	return render.Render(w, r, NewPageResponse(page))
 
 }
 
-func (rs *Resource) Get(w http.ResponseWriter, r *http.Request) {
+func (rs *Resource) Get(w http.ResponseWriter, r *http.Request) error {
 
 	s, ok := fromContext(r.Context())
 
 	if !ok {
-		http.Error(w, http.StatusText(422), 422)
-		return
+		return missingContext
 	}
 
-	if err := render.Render(w, r, NewSightingResponse(s)); err != nil {
-		render.Render(w, r, ErrRender(err))
-	}
+	return render.Render(w, r, NewSightingResponse(s))
 
+}
+
+// wraps handler so we can just return an error
+func handle(h HandlerFunc) http.HandlerFunc {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if err := h(w, r); err != nil {
+			render.Render(w, r, ErrRender(err))
+		}
+	})
 }
 
 func newContext(ctx context.Context, s *models.Sighting) context.Context {
