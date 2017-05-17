@@ -42,22 +42,21 @@ func (rs *Resource) Routes() chi.Router {
 }
 
 func (rs *Resource) WithSighting(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	return handle(func(w http.ResponseWriter, r *http.Request) error {
 		id := chi.URLParam(r, "id")
 
 		if _, err := strconv.ParseInt(id, 10, 64); err != nil {
-			render.Render(w, r, ErrRender(invalidRoute))
-			return
+			return invalidRoute
 		}
 
 		s, err := rs.Store.GetOne(id)
 
 		if err != nil {
-			render.Render(w, r, ErrRender(err))
-			return
+			return err
 		}
 
 		next.ServeHTTP(w, r.WithContext(newContext(r.Context(), s)))
+		return nil
 	})
 }
 
