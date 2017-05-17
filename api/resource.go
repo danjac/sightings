@@ -50,7 +50,7 @@ func (rs *Resource) WithSighting(next http.Handler) http.Handler {
 			return
 		}
 
-		next.ServeHTTP(w, r.WithContext(context.WithValue(r.Context(), sightingContextKey, s)))
+		next.ServeHTTP(w, r.WithContext(newContext(r.Context(), s)))
 	})
 }
 
@@ -86,7 +86,7 @@ func (rs *Resource) List(w http.ResponseWriter, r *http.Request) {
 
 func (rs *Resource) Get(w http.ResponseWriter, r *http.Request) {
 
-	s, ok := rs.FromRequest(r)
+	s, ok := fromContext(r.Context())
 
 	if !ok {
 		http.Error(w, http.StatusText(422), 422)
@@ -94,11 +94,6 @@ func (rs *Resource) Get(w http.ResponseWriter, r *http.Request) {
 	}
 
 	rs.Render(w, r, NewSightingResponse(s))
-}
-
-func (rs *Resource) FromRequest(r *http.Request) (*sightings.Sighting, bool) {
-	s, ok := r.Context().Value(sightingContextKey).(*sightings.Sighting)
-	return s, ok
 }
 
 func (rs *Resource) Error(w http.ResponseWriter, r *http.Request, err error) {
@@ -109,4 +104,13 @@ func (rs *Resource) Render(w http.ResponseWriter, r *http.Request, renderer rend
 	if err := render.Render(w, r, renderer); err != nil {
 		rs.Error(w, r, err)
 	}
+}
+
+func newContext(ctx context.Context, s *sightings.Sighting) context.Context {
+	return context.WithValue(ctx, sightingContextKey, s)
+}
+
+func fromContext(ctx context.Context) (*sightings.Sighting, bool) {
+	s, ok := ctx.Value(sightingContextKey).(*sightings.Sighting)
+	return s, ok
 }
