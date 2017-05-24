@@ -2,7 +2,6 @@ package api
 
 import (
 	"context"
-	"errors"
 	"github.com/danjac/sightings/config"
 	"github.com/danjac/sightings/models"
 	"github.com/pressly/chi"
@@ -11,16 +10,11 @@ import (
 	"strconv"
 )
 
-var invalidRoute = errors.New("Invalid route")
-var missingContext = errors.New("Unprocessable entity")
-
 const sightingContextKey = "sighting"
 
 type Resource struct {
 	*config.AppConfig
 }
-
-type HandlerFunc func(w http.ResponseWriter, r *http.Request) error
 
 func NewResource(cfg *config.AppConfig) *Resource {
 	return &Resource{cfg}
@@ -30,27 +24,25 @@ func (rs *Resource) Routes() chi.Router {
 
 	r := chi.NewRouter()
 
-	r.Get("/", handle(rs.List))
+	r.Get("/", handler(rs.List))
 
 	r.With(rs.WithSighting).
 		Route("/:id", func(r chi.Router) {
-			r.Get("/", handle(rs.Get))
-			// delete, update....
+			r.Get("/", handler(rs.Get))
 		})
 
 	return r
 }
 
 func (rs *Resource) WithSighting(next http.Handler) http.Handler {
-	return handle(func(w http.ResponseWriter, r *http.Request) error {
-
+	return handler(func(w http.ResponseWriter, r *http.Request) error {
 		var (
 			id  int64
 			err error
 		)
 
 		if id, err = strconv.ParseInt(chi.URLParam(r, "id"), 10, 64); err != nil {
-			return invalidRoute
+			return errNotFound
 		}
 
 		s, err := rs.Store.Get(id)
@@ -99,7 +91,7 @@ func (rs *Resource) Get(w http.ResponseWriter, r *http.Request) error {
 	s, ok := fromContext(r.Context())
 
 	if !ok {
-		return missingContext
+		return errUnprocessableEntity
 	}
 
 	return render.Render(w, r, NewSightingResponse(s))
@@ -107,7 +99,10 @@ func (rs *Resource) Get(w http.ResponseWriter, r *http.Request) error {
 }
 
 // wraps handler so we can just return an error
-func handle(h HandlerFunc) http.HandlerFunc {
+
+type handlerFunc func(w http.ResponseWriter, r *http.Request) error
+
+func handler(h handlerFunc) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if err := h(w, r); err != nil {
 			render.Render(w, r, ErrRender(err))
