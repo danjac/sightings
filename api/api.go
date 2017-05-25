@@ -6,6 +6,7 @@ import (
 	"github.com/pressly/chi"
 	"github.com/pressly/chi/middleware"
 	"github.com/pressly/chi/render"
+	"net/http"
 )
 
 func NewRouter(cfg *config.AppConfig, prefix string) chi.Router {
@@ -24,6 +25,11 @@ func NewRouter(cfg *config.AppConfig, prefix string) chi.Router {
 	r.Use(cors.Handler)
 
 	r.Route(prefix, func(r chi.Router) {
+
+		r.Get("/ping", func(w http.ResponseWriter, r *http.Request) {
+			render.PlainText(w, r, "pong")
+		})
+
 		r.Mount("/sightings", NewResource(cfg).Routes())
 	})
 

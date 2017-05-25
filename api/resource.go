@@ -24,11 +24,11 @@ func (rs *Resource) Routes() chi.Router {
 
 	r := chi.NewRouter()
 
-	r.Get("/", handler(rs.List))
+	r.Get("/", rs.List())
 
 	r.With(rs.WithSighting).
 		Route("/:id", func(r chi.Router) {
-			r.Get("/", handler(rs.Get))
+			r.Get("/", rs.Get())
 		})
 
 	return r
@@ -56,46 +56,48 @@ func (rs *Resource) WithSighting(next http.Handler) http.Handler {
 	})
 }
 
-func (rs *Resource) List(w http.ResponseWriter, r *http.Request) error {
+func (rs *Resource) List() http.HandlerFunc {
+	return handler(func(w http.ResponseWriter, r *http.Request) error {
 
-	var (
-		page       *models.Page
-		pageNumber int64
-		err        error
-	)
+		var (
+			page       *models.Page
+			pageNumber int64
+			err        error
+		)
 
-	pageNumber, err = strconv.ParseInt(r.URL.Query().Get("page"), 10, 64)
+		pageNumber, err = strconv.ParseInt(r.URL.Query().Get("page"), 10, 64)
 
-	if err != nil {
-		pageNumber = 1
-	}
+		if err != nil {
+			pageNumber = 1
+		}
 
-	search := r.URL.Query().Get("s")
+		search := r.URL.Query().Get("s")
 
-	if search == "" {
-		page, err = rs.Store.Find(pageNumber)
-	} else {
-		page, err = rs.Store.Search(search, pageNumber)
-	}
+		if search == "" {
+			page, err = rs.Store.Find(pageNumber)
+		} else {
+			page, err = rs.Store.Search(search, pageNumber)
+		}
 
-	if err != nil {
-		return err
-	}
+		if err != nil {
+			return err
+		}
 
-	return render.Render(w, r, NewPageResponse(page))
-
+		return render.Render(w, r, NewPageResponse(page))
+	})
 }
 
-func (rs *Resource) Get(w http.ResponseWriter, r *http.Request) error {
+func (rs *Resource) Get() http.HandlerFunc {
+	return handler(func(w http.ResponseWriter, r *http.Request) error {
 
-	s, ok := fromContext(r.Context())
+		s, ok := fromContext(r.Context())
 
-	if !ok {
-		return errUnprocessableEntity
-	}
+		if !ok {
+			return errUnprocessableEntity
+		}
 
-	return render.Render(w, r, NewSightingResponse(s))
-
+		return render.Render(w, r, NewSightingResponse(s))
+	})
 }
 
 // wraps handler so we can just return an error
