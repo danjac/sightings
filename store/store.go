@@ -62,7 +62,7 @@ type DBStore struct {
 	Closer
 }
 
-func NewStore(db *DB) Store {
+func New(db *DB) Store {
 	return &DBStore{
 		Reader: &DBReader{db},
 		Writer: &DBWriter{db},

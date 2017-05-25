@@ -24,7 +24,7 @@ func (cfg *AppConfig) Close() error {
 	return cfg.Store.Close()
 }
 
-func Configure() (*AppConfig, error) {
+func New() (*AppConfig, error) {
 
 	viper.AutomaticEnv()
 
@@ -43,7 +43,7 @@ func Configure() (*AppConfig, error) {
 		return nil, err
 	}
 
-	cfg.Store = store.NewStore(db)
+	cfg.Store = store.New(db)
 
 	cfg.Port = viper.GetString("port")
 
