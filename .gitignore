@@ -1,6 +1,4 @@
 bin
 dbconfig.yml
-server
-importer
 vendor
 *.log
