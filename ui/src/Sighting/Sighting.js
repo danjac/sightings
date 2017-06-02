@@ -36,10 +36,10 @@ export default ({ sighting, isLoading, error }) => {
           <dl>
             <dt>Date</dt>
             <dd>{moment(sighting.occurredAt).format('MMMM Do YYYY')}</dd>
-            <dt>Duration</dt>
-            <dd>{sighting.duration}</dd>
-            <dt>Shape</dt>
-            <dd>{sighting.shape}</dd>
+            {sighting.duration && <dt>Duration</dt>}
+            {sighting.duration && <dd>{sighting.duration}</dd>}
+            {sighting.shape && <dt>Shape</dt>}
+            {sighting.shape && <dd>{sighting.shape}</dd>}
           </dl>
           </Popup>
         </Marker>

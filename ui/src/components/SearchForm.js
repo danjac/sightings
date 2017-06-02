@@ -3,11 +3,10 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 
 import {
+  Form,
   FormGroup,
-  FormControl,
-  InputGroup,
-  Glyphicon,
-} from 'react-bootstrap';
+  Input,
+} from 'reactstrap';
 
 
 class SearchForm extends Component {
@@ -35,21 +34,17 @@ class SearchForm extends Component {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
+      <Form onSubmit={this.handleSubmit}>
           <FormGroup>
-            <InputGroup>
-              <InputGroup.Addon>
-                <Glyphicon glyph="search" />
-              </InputGroup.Addon>
-              <FormControl
+            <Input
                 onChange={this.handleChange}
                 value={this.state.value}
                 type="search"
+                size="lg"
                 placeholder="Find a sighting"
               />
-            </InputGroup>
           </FormGroup>
-        </form>
+        </Form>
     );
   }
 

@@ -8,12 +8,12 @@ import {
 
 
 import {
-  PageHeader ,
-  Grid,
+  Container,
   Row,
   Col,
-} from 'react-bootstrap';
+} from 'reactstrap';
 
+// import 'bootstrap/dist/css/bootstrap.css';
 import logo from '../humanoid.png';
 import './App.css';
 
@@ -25,9 +25,8 @@ import Home from '../Home';
 export default ({ onSearch }) => {
   return (
     <Router>
-      <div className="container">
-      <PageHeader>
-        <Grid>
+      <Container>
+        <Container>
           <Row>
             <Col md={2}>
               <img src={logo} height={100} width={100} alt="Ufo sightings" />
@@ -36,12 +35,12 @@ export default ({ onSearch }) => {
               <h1><Link to="/">UFO sightings</Link></h1>
             </Col>
           </Row>
-        </Grid>
+        </Container>
+        <hr />
         <SearchForm onSubmit={onSearch} />
-        </PageHeader>
       <Route exact path="/" component={Home} />
       <Route path="/:id" component={Sighting} />
-      </div>
+      </Container>
     </Router>
   );
 };

@@ -3,7 +3,7 @@ import React from 'react';
 import moment from 'moment';
 
 import { Link } from 'react-router-dom';
-import { Table } from 'react-bootstrap';
+import { Table } from 'reactstrap';
 
 import { Loading, Pager } from '../components';
 
@@ -25,7 +25,7 @@ export default (props) => {
   return (
     <div>
       <Pager {...props} />
-      <Table striped bordered condensed>
+      <Table striped bordered responsive>
       <thead>
         <tr>
           <th>Date</th>
