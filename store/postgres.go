@@ -15,7 +15,7 @@ const pageSize = 30
 
 func newDB(db *sqlx.DB) *DB {
 	builder := sq.StatementBuilder.
-		RunWith(db.DB).
+		RunWith(sq.NewStmtCacher(db.DB)).
 		PlaceholderFormat(sq.Dollar)
 	return &DB{db, builder}
 }

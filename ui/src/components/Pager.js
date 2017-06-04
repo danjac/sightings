@@ -34,7 +34,9 @@ export default ({ location, page }) => {
 
   // these are a bit off
   const firstPage = (page.number - 10) < 1 ? 1 : page.number - 10;
-  const lastPage = (page.number + 10) > page.totalPages ? page.totalPages : page.number + 10;
+
+  const maxPagesAhead = page.number < 10 ? 20 - page.number : 10;
+  const lastPage = (page.number + maxPagesAhead) > page.totalPages ? page.totalPages : page.number + maxPagesAhead;
 
   return (
     <Pagination>

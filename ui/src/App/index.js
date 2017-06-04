@@ -1,15 +1,18 @@
+// @flow
 import React, { Component } from 'react';
 
 import App from './App';
 
 class Container extends Component {
 
-  constructor(props) {
+  handleSearch: Function;
+
+  constructor(props: Object) {
     super(props);
     this.handleSearch = this.handleSearch.bind(this);
   }
 
-  handleSearch(value, history) {
+  handleSearch(value: string, history: Object) {
     history.replace(`/?s=${value}`);
   }
 

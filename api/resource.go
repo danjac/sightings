@@ -35,7 +35,7 @@ func (rs *Resource) Routes() chi.Router {
 }
 
 func (rs *Resource) WithSighting(next http.Handler) http.Handler {
-	return handler(func(w http.ResponseWriter, r *http.Request) error {
+	return errHandler(func(w http.ResponseWriter, r *http.Request) error {
 		var (
 			id  int64
 			err error
@@ -57,7 +57,7 @@ func (rs *Resource) WithSighting(next http.Handler) http.Handler {
 }
 
 func (rs *Resource) List() http.HandlerFunc {
-	return handler(func(w http.ResponseWriter, r *http.Request) error {
+	return errHandler(func(w http.ResponseWriter, r *http.Request) error {
 
 		var (
 			page       *models.Page
@@ -88,7 +88,7 @@ func (rs *Resource) List() http.HandlerFunc {
 }
 
 func (rs *Resource) Get() http.HandlerFunc {
-	return handler(func(w http.ResponseWriter, r *http.Request) error {
+	return errHandler(func(w http.ResponseWriter, r *http.Request) error {
 
 		s, ok := fromContext(r.Context())
 
@@ -102,9 +102,9 @@ func (rs *Resource) Get() http.HandlerFunc {
 
 // wraps handler so we can just return an error
 
-type handlerFunc func(w http.ResponseWriter, r *http.Request) error
+type errHandlerFunc func(w http.ResponseWriter, r *http.Request) error
 
-func handler(h handlerFunc) http.HandlerFunc {
+func errHandler(h errHandlerFunc) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if err := h(w, r); err != nil {
 			render.Render(w, r, ErrRender(err))
