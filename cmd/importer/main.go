@@ -95,7 +95,7 @@ func main() {
 		panic(err)
 	}
 
-	cfg, err := config.New()
+	cfg, err := config.Configure()
 
 	defer cfg.Close()
 

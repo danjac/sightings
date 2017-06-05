@@ -10,6 +10,12 @@ import (
 	"testing"
 )
 
+type mockRepo struct {
+	repo.Reader
+	repo.Writer
+	repo.Closer
+}
+
 type mockReader struct {
 	sighting *models.Sighting
 	page     *models.Page
@@ -30,7 +36,7 @@ func (r *mockReader) Search(_ string, _ int64) (*models.Page, error) {
 
 func testRequest(
 	t *testing.T,
-	cfg *config.AppConfig,
+	cfg *config.Config,
 	method string,
 	url string,
 	expectedStatus int) *httptest.ResponseRecorder {
@@ -55,8 +61,8 @@ func testRequest(
 
 func TestGetSighting(t *testing.T) {
 
-	cfg := &config.AppConfig{}
-	cfg.Repo = &repo.DBRepo{
+	cfg := &config.Config{}
+	cfg.Repo = &mockRepo{
 		Reader: &mockReader{
 			sighting: &models.Sighting{},
 		},
@@ -67,9 +73,9 @@ func TestGetSighting(t *testing.T) {
 
 func TestGetSightingNotFound(t *testing.T) {
 
-	cfg := &config.AppConfig{}
+	cfg := &config.Config{}
 
-	cfg.Repo = &repo.DBRepo{
+	cfg.Repo = &mockRepo{
 		Reader: &mockReader{
 			sighting: nil,
 			err:      sql.ErrNoRows,
@@ -81,8 +87,8 @@ func TestGetSightingNotFound(t *testing.T) {
 
 func TestListSightings(t *testing.T) {
 
-	cfg := &config.AppConfig{}
-	cfg.Repo = &repo.DBRepo{
+	cfg := &config.Config{}
+	cfg.Repo = &mockRepo{
 		Reader: &mockReader{
 			page: &models.Page{},
 		},

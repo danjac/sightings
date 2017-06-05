@@ -20,20 +20,20 @@ const (
 	ApiRoot    = "/api/" + ApiVersion
 )
 
-type AppConfig struct {
+type Config struct {
 	Repo repo.Repo
 	Port string
 }
 
-func (cfg *AppConfig) Close() error {
+func (cfg *Config) Close() error {
 	return cfg.Repo.Close()
 }
 
-func New() (*AppConfig, error) {
+func Configure() (*Config, error) {
 
 	viper.AutomaticEnv()
 
-	cfg := &AppConfig{}
+	cfg := &Config{}
 
 	connection := fmt.Sprintf("dbname=%s user=%s password=%s host=%s sslmode=%s",
 		viper.Get("db_name"),
