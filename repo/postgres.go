@@ -1,4 +1,4 @@
-package store
+package repo
 
 import (
 	sq "github.com/Masterminds/squirrel"

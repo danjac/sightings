@@ -125,7 +125,7 @@ func main() {
 			continue
 		}
 
-		if err := cfg.Store.Insert(s); err != nil {
+		if err := cfg.Repo.Insert(s); err != nil {
 			fmt.Printf("%v\n", err)
 			continue
 		}

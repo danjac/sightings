@@ -2,7 +2,7 @@ package config
 
 import (
 	"fmt"
-	"github.com/danjac/sightings/store"
+	"github.com/danjac/sightings/repo"
 	"github.com/spf13/viper"
 )
 
@@ -16,12 +16,12 @@ func init() {
 }
 
 type AppConfig struct {
-	Store store.Store
-	Port  string
+	Repo repo.Repo
+	Port string
 }
 
 func (cfg *AppConfig) Close() error {
-	return cfg.Store.Close()
+	return cfg.Repo.Close()
 }
 
 func New() (*AppConfig, error) {
@@ -38,12 +38,12 @@ func New() (*AppConfig, error) {
 		viper.Get("db_sslmode"),
 	)
 
-	db, err := store.Connect(connection)
+	db, err := repo.Connect(connection)
 	if err != nil {
 		return nil, err
 	}
 
-	cfg.Store = store.New(db)
+	cfg.Repo = repo.New(db)
 
 	cfg.Port = viper.GetString("port")
 

@@ -45,7 +45,7 @@ func (rs *Resource) WithSighting(next http.Handler) http.Handler {
 			return errNotFound
 		}
 
-		s, err := rs.Store.Get(id)
+		s, err := rs.Repo.Get(id)
 
 		if err != nil {
 			return err
@@ -74,9 +74,9 @@ func (rs *Resource) List() http.HandlerFunc {
 		search := r.URL.Query().Get("s")
 
 		if search == "" {
-			page, err = rs.Store.Find(pageNumber)
+			page, err = rs.Repo.Find(pageNumber)
 		} else {
-			page, err = rs.Store.Search(search, pageNumber)
+			page, err = rs.Repo.Search(search, pageNumber)
 		}
 
 		if err != nil {

@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"github.com/danjac/sightings/config"
 	"github.com/danjac/sightings/models"
-	"github.com/danjac/sightings/store"
+	"github.com/danjac/sightings/repo"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -56,7 +56,7 @@ func testRequest(
 func TestGetSighting(t *testing.T) {
 
 	cfg := &config.AppConfig{}
-	cfg.Store = &store.DBStore{
+	cfg.Repo = &repo.DBRepo{
 		Reader: &mockReader{
 			sighting: &models.Sighting{},
 		},
@@ -69,7 +69,7 @@ func TestGetSightingNotFound(t *testing.T) {
 
 	cfg := &config.AppConfig{}
 
-	cfg.Store = &store.DBStore{
+	cfg.Repo = &repo.DBRepo{
 		Reader: &mockReader{
 			sighting: nil,
 			err:      sql.ErrNoRows,
@@ -82,7 +82,7 @@ func TestGetSightingNotFound(t *testing.T) {
 func TestListSightings(t *testing.T) {
 
 	cfg := &config.AppConfig{}
-	cfg.Store = &store.DBStore{
+	cfg.Repo = &repo.DBRepo{
 		Reader: &mockReader{
 			page: &models.Page{},
 		},

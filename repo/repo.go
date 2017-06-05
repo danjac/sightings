@@ -1,4 +1,4 @@
-package store
+package repo
 
 import (
 	"github.com/danjac/sightings/models"
@@ -50,20 +50,20 @@ type Closer interface {
 	Close() error
 }
 
-type Store interface {
+type Repo interface {
 	Reader
 	Writer
 	Closer
 }
 
-type DBStore struct {
+type DBRepo struct {
 	Reader
 	Writer
 	Closer
 }
 
-func New(db *DB) Store {
-	return &DBStore{
+func New(db *DB) Repo {
+	return &DBRepo{
 		Reader: &DBReader{db},
 		Writer: &DBWriter{db},
 		Closer: db,
