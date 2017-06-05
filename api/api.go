@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func NewRouter(cfg *config.Config, prefix string) chi.Router {
+func NewRouter(cfg *config.Config) chi.Router {
 
 	r := chi.NewRouter()
 
@@ -24,7 +24,7 @@ func NewRouter(cfg *config.Config, prefix string) chi.Router {
 
 	r.Use(cors.Handler)
 
-	r.Route(prefix, func(r chi.Router) {
+	r.Route(cfg.Api.Path, func(r chi.Router) {
 
 		r.Get("/ping", func(w http.ResponseWriter, r *http.Request) {
 			render.PlainText(w, r, "pong")

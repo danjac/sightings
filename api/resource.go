@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"fmt"
 	"github.com/danjac/sightings/config"
 	"github.com/danjac/sightings/models"
 	"github.com/pressly/chi"
@@ -83,6 +84,13 @@ func (rs *Resource) List() http.HandlerFunc {
 			return err
 		}
 
+		// assign URLs to each sighting
+
+		for i, _ := range page.Sightings {
+			s := &page.Sightings[i]
+			s.URL = rs.getSightingURL(r, s)
+		}
+
 		return render.Render(w, r, NewSightingsPageResponse(r, page))
 	})
 }
@@ -98,6 +106,16 @@ func (rs *Resource) Get() http.HandlerFunc {
 
 		return render.Render(w, r, NewSightingResponse(s))
 	})
+}
+
+func (rs *Resource) getSightingURL(r *http.Request, s *models.Sighting) string {
+	return fmt.Sprintf(
+		"%s://%s%s/sightings/%d",
+		getScheme(r),
+		r.Host,
+		rs.Api.Path,
+		s.ID,
+	)
 }
 
 // wraps handler so we can just return an error
@@ -119,4 +137,11 @@ func newContext(ctx context.Context, s *models.Sighting) context.Context {
 func fromContext(ctx context.Context) (*models.Sighting, bool) {
 	s, ok := ctx.Value(sightingContextKey).(*models.Sighting)
 	return s, ok
+}
+
+func getScheme(r *http.Request) string {
+	if r.TLS == nil {
+		return "http"
+	}
+	return "https"
 }

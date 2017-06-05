@@ -2,8 +2,6 @@ package api
 
 import (
 	"database/sql"
-	"fmt"
-	"github.com/danjac/sightings/config"
 	"github.com/danjac/sightings/models"
 	"github.com/pressly/chi/render"
 	"net/http"
@@ -18,13 +16,7 @@ func (resp *SightingsPageResponse) Render(w http.ResponseWriter, r *http.Request
 }
 
 func NewSightingsPageResponse(r *http.Request, page *models.SightingsPage) *SightingsPageResponse {
-	resp := &SightingsPageResponse{page}
-
-	for i, _ := range page.Sightings {
-		s := &page.Sightings[i]
-		s.URL = getSightingURL(r, s)
-	}
-	return resp
+	return &SightingsPageResponse{page}
 }
 
 type SightingResponse struct {
@@ -79,21 +71,4 @@ func ErrRender(err error) render.Renderer {
 		StatusText:     statusText,
 		ErrorText:      err.Error(),
 	}
-}
-
-func getScheme(r *http.Request) string {
-	if r.TLS == nil {
-		return "http"
-	}
-	return "https"
-}
-
-func getSightingURL(r *http.Request, s *models.Sighting) string {
-	return fmt.Sprintf(
-		"%s://%s%s/sightings/%d",
-		getScheme(r),
-		r.Host,
-		config.ApiRoot,
-		s.ID,
-	)
 }

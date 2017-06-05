@@ -10,6 +10,14 @@ import (
 	"testing"
 )
 
+func newConfig() *config.Config {
+	return &config.Config{
+		Api: &config.ApiConfig{
+			Path: "/api/",
+		},
+	}
+}
+
 type mockRepo struct {
 	repo.Reader
 	repo.Writer
@@ -41,7 +49,7 @@ func testRequest(
 	url string,
 	expectedStatus int) *httptest.ResponseRecorder {
 
-	api := NewRouter(cfg, "/api")
+	api := NewRouter(cfg)
 
 	req, err := http.NewRequest(method, url, nil)
 
@@ -61,7 +69,8 @@ func testRequest(
 
 func TestGetSighting(t *testing.T) {
 
-	cfg := &config.Config{}
+	cfg := newConfig()
+
 	cfg.Repo = &mockRepo{
 		Reader: &mockReader{
 			sighting: &models.Sighting{},
@@ -73,7 +82,7 @@ func TestGetSighting(t *testing.T) {
 
 func TestGetSightingNotFound(t *testing.T) {
 
-	cfg := &config.Config{}
+	cfg := newConfig()
 
 	cfg.Repo = &mockRepo{
 		Reader: &mockReader{
@@ -87,7 +96,8 @@ func TestGetSightingNotFound(t *testing.T) {
 
 func TestListSightings(t *testing.T) {
 
-	cfg := &config.Config{}
+	cfg := newConfig()
+
 	cfg.Repo = &mockRepo{
 		Reader: &mockReader{
 			page: &models.SightingsPage{},

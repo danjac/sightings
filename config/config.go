@@ -15,14 +15,25 @@ func init() {
 	viper.SetDefault("port", "4000")
 }
 
-const (
-	ApiVersion = "v1"
-	ApiRoot    = "/api/" + ApiVersion
-)
+const ApiVersion = "v1"
+
+type ApiConfig struct {
+	Version string
+	Path    string
+	Port    string
+}
+
+func NewApiConfig(port string) *ApiConfig {
+	return &ApiConfig{
+		Version: ApiVersion,
+		Path:    "/api/" + ApiVersion,
+		Port:    port,
+	}
+}
 
 type Config struct {
+	Api  *ApiConfig
 	Repo repo.Repo
-	Port string
 }
 
 func (cfg *Config) Close() error {
@@ -50,7 +61,7 @@ func Configure() (*Config, error) {
 
 	cfg.Repo = repo.New(db)
 
-	cfg.Port = viper.GetString("port")
+	cfg.Api = NewApiConfig(viper.GetString("port"))
 
 	return cfg, nil
 

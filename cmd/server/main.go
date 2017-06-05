@@ -16,9 +16,9 @@ func main() {
 
 	defer cfg.Close()
 
-	router := api.NewRouter(cfg, config.ApiRoot)
+	router := api.NewRouter(cfg)
 
-	if err := http.ListenAndServe(fmt.Sprintf(":%s", cfg.Port), router); err != nil {
+	if err := http.ListenAndServe(fmt.Sprintf(":%s", cfg.Api.Port), router); err != nil {
 		panic(err)
 	}
 }
