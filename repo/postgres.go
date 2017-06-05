@@ -11,7 +11,10 @@ type DB struct {
 	sq sq.StatementBuilderType
 }
 
-const pageSize = 30
+const (
+	pageSize       = 30
+	sightingsTable = "sightings"
+)
 
 func newDB(db *sqlx.DB) *DB {
 	builder := sq.StatementBuilder.
@@ -28,7 +31,7 @@ func (r *DBReader) Get(id int64) (*models.Sighting, error) {
 
 	sql, args, err := r.sq.
 		Select("*").
-		From("sightings").
+		From(sightingsTable).
 		Where(sq.Eq{"id": id}).
 		ToSql()
 
@@ -48,11 +51,11 @@ func (r *DBReader) Get(id int64) (*models.Sighting, error) {
 func (r *DBReader) Find(pageNumber int64) (*models.Page, error) {
 	countQuery := r.sq.
 		Select("COUNT(id)").
-		From("sightings")
+		From(sightingsTable)
 
 	selectQuery := r.sq.
 		Select("*").
-		From("sightings").
+		From(sightingsTable).
 		OrderBy("occurred_at DESC")
 
 	return r.paginate(countQuery, selectQuery, pageNumber)
@@ -64,12 +67,12 @@ func (r *DBReader) Search(search string, pageNumber int64) (*models.Page, error)
 
 	countQuery := r.sq.
 		Select("COUNT(id)").
-		From("sightings").
+		From(sightingsTable).
 		Where(where)
 
 	selectQuery := r.sq.
 		Select("*").
-		From("sightings").
+		From(sightingsTable).
 		Where(where).
 		OrderBy("occurred_at DESC")
 
@@ -114,7 +117,7 @@ type DBWriter struct {
 
 func (w *DBWriter) Insert(s *models.Sighting) error {
 	q := w.sq.
-		Insert("sightings").
+		Insert(sightingsTable).
 		Columns(
 			"occurred_at",
 			"reported_at",
