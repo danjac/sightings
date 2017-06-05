@@ -60,7 +60,7 @@ func (rs *Resource) List() http.HandlerFunc {
 	return errHandler(func(w http.ResponseWriter, r *http.Request) error {
 
 		var (
-			page       *models.Page
+			page       *models.SightingsPage
 			pageNumber int64
 			err        error
 		)
@@ -83,7 +83,7 @@ func (rs *Resource) List() http.HandlerFunc {
 			return err
 		}
 
-		return render.Render(w, r, NewPageResponse(r, page))
+		return render.Render(w, r, NewSightingsPageResponse(r, page))
 	})
 }
 

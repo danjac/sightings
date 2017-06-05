@@ -9,10 +9,10 @@ build_go:
 	go build -o bin/server cmd/server/main.go
 	go build -o bin/importer cmd/importer/main.go
 
-build_ui:
-	cd ui && npm install && npm run build
+build_client:
+	cd client && npm install && npm run build
 
-all: build_go build_ui
+all: build_go build_client
 
 test:
 	go test $$(glide novendor)
@@ -20,6 +20,6 @@ test:
 clean:
 	rm -rf bin
 	rm -rf vendor
-	rm -rf ui/node_modules
-	rm -rf ui/build
+	rm -rf client/node_modules
+	rm -rf client/build
 	glide cc

@@ -18,7 +18,7 @@ type mockRepo struct {
 
 type mockReader struct {
 	sighting *models.Sighting
-	page     *models.Page
+	page     *models.SightingsPage
 	err      error
 }
 
@@ -26,11 +26,11 @@ func (r *mockReader) Get(_ int64) (*models.Sighting, error) {
 	return r.sighting, r.err
 }
 
-func (r *mockReader) Find(_ int64) (*models.Page, error) {
+func (r *mockReader) Find(_ int64) (*models.SightingsPage, error) {
 	return r.page, r.err
 }
 
-func (r *mockReader) Search(_ string, _ int64) (*models.Page, error) {
+func (r *mockReader) Search(_ string, _ int64) (*models.SightingsPage, error) {
 	return r.page, r.err
 }
 
@@ -90,7 +90,7 @@ func TestListSightings(t *testing.T) {
 	cfg := &config.Config{}
 	cfg.Repo = &mockRepo{
 		Reader: &mockReader{
-			page: &models.Page{},
+			page: &models.SightingsPage{},
 		},
 	}
 

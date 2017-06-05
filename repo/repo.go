@@ -29,7 +29,7 @@ type Writer interface {
 }
 
 type Finder interface {
-	Find(int64) (*models.Page, error)
+	Find(int64) (*models.SightingsPage, error)
 }
 
 type Getter interface {
@@ -37,7 +37,7 @@ type Getter interface {
 }
 
 type Searcher interface {
-	Search(string, int64) (*models.Page, error)
+	Search(string, int64) (*models.SightingsPage, error)
 }
 
 type Reader interface {

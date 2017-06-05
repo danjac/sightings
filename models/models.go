@@ -8,11 +8,15 @@ import (
 )
 
 type Page struct {
-	PageSize   int        `json:"pageSize"`
-	Number     int64      `json:"number"`
-	TotalRows  int64      `json:"totalRows"`
-	TotalPages int64      `json:"totalPages"`
-	Sightings  []Sighting `json:"sightings"`
+	PageSize   int   `json:"pageSize"`
+	Number     int64 `json:"number"`
+	TotalRows  int64 `json:"totalRows"`
+	TotalPages int64 `json:"totalPages"`
+}
+
+type SightingsPage struct {
+	*Page
+	Sightings []Sighting `json:"sightings"`
 }
 
 type Sighting struct {

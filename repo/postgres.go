@@ -45,11 +45,11 @@ func (r *DBReader) Get(id int64) (*models.Sighting, error) {
 	return s, nil
 }
 
-func (r *DBReader) Find(pageNumber int64) (*models.Page, error) {
+func (r *DBReader) Find(pageNumber int64) (*models.SightingsPage, error) {
 	return r.paginate(r.doCount(), r.doSelect(), pageNumber)
 }
 
-func (r *DBReader) Search(search string, pageNumber int64) (*models.Page, error) {
+func (r *DBReader) Search(search string, pageNumber int64) (*models.SightingsPage, error) {
 
 	where := sq.Expr("tsv @@ plainto_tsquery(?)", search)
 
@@ -73,9 +73,14 @@ func (r *DBReader) doSelectAll() sq.SelectBuilder {
 
 func (r *DBReader) paginate(countQuery sq.SelectBuilder,
 	selectQuery sq.SelectBuilder,
-	pageNumber int64) (*models.Page, error) {
+	pageNumber int64) (*models.SightingsPage, error) {
 
-	page := &models.Page{Number: pageNumber, PageSize: pageSize}
+	page := &models.SightingsPage{
+		Page: &models.Page{
+			Number:   pageNumber,
+			PageSize: pageSize,
+		},
+	}
 
 	if err := countQuery.
 		QueryRow().

@@ -9,16 +9,16 @@ import (
 	"net/http"
 )
 
-type PageResponse struct {
-	*models.Page
+type SightingsPageResponse struct {
+	*models.SightingsPage
 }
 
-func (resp *PageResponse) Render(w http.ResponseWriter, r *http.Request) error {
+func (resp *SightingsPageResponse) Render(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
-func NewPageResponse(r *http.Request, page *models.Page) *PageResponse {
-	resp := &PageResponse{page}
+func NewSightingsPageResponse(r *http.Request, page *models.SightingsPage) *SightingsPageResponse {
+	resp := &SightingsPageResponse{page}
 
 	for i, _ := range page.Sightings {
 		s := &page.Sightings[i]
