@@ -14,6 +14,7 @@ type DB struct {
 const (
 	pageSize       = 30
 	sightingsTable = "sightings"
+	defaultOrderBy = "occurred_at DESC"
 )
 
 func newDB(db *sqlx.DB) *DB {
@@ -29,11 +30,7 @@ type DBReader struct {
 
 func (r *DBReader) Get(id int64) (*models.Sighting, error) {
 
-	sql, args, err := r.sq.
-		Select("*").
-		From(sightingsTable).
-		Where(sq.Eq{"id": id}).
-		ToSql()
+	sql, args, err := r.doSelect().Where(sq.Eq{"id": id}).ToSql()
 
 	if err != nil {
 		return nil, err
@@ -49,34 +46,29 @@ func (r *DBReader) Get(id int64) (*models.Sighting, error) {
 }
 
 func (r *DBReader) Find(pageNumber int64) (*models.Page, error) {
-	countQuery := r.sq.
-		Select("COUNT(id)").
-		From(sightingsTable)
-
-	selectQuery := r.sq.
-		Select("*").
-		From(sightingsTable).
-		OrderBy("occurred_at DESC")
-
-	return r.paginate(countQuery, selectQuery, pageNumber)
+	return r.paginate(r.doCount(), r.doSelect(), pageNumber)
 }
 
 func (r *DBReader) Search(search string, pageNumber int64) (*models.Page, error) {
 
 	where := sq.Expr("tsv @@ plainto_tsquery(?)", search)
 
-	countQuery := r.sq.
-		Select("COUNT(id)").
-		From(sightingsTable).
-		Where(where)
-
-	selectQuery := r.sq.
-		Select("*").
-		From(sightingsTable).
-		Where(where).
-		OrderBy("occurred_at DESC")
+	countQuery := r.doCount().Where(where)
+	selectQuery := r.doSelectAll().Where(where)
 
 	return r.paginate(countQuery, selectQuery, pageNumber)
+}
+
+func (r *DBReader) doCount() sq.SelectBuilder {
+	return r.sq.Select("COUNT(id)").From(sightingsTable)
+}
+
+func (r *DBReader) doSelect() sq.SelectBuilder {
+	return r.sq.Select("*").From(sightingsTable)
+}
+
+func (r *DBReader) doSelectAll() sq.SelectBuilder {
+	return r.doSelect().OrderBy(defaultOrderBy)
 }
 
 func (r *DBReader) paginate(countQuery sq.SelectBuilder,
