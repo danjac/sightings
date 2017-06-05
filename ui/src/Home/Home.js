@@ -5,7 +5,10 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { Table } from 'reactstrap';
 
+import { removeTrailingComma } from '../utils';
+
 import { Loading, Pager } from '../components';
+
 
 
 export default (props) => {
@@ -43,7 +46,7 @@ export default (props) => {
             {row.shape || 'unknown'}
           </td>
           <td>
-            {row.location}
+            {removeTrailingComma(row.location)}
           </td>
         </tr>
       ))}

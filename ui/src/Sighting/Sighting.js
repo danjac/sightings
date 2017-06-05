@@ -10,6 +10,7 @@ import {
 
 import moment from 'moment';
 
+import { removeTrailingComma } from '../utils';
 import { Loading } from '../components';
 
 export default ({ sighting, isLoading, error }) => {
@@ -25,7 +26,7 @@ export default ({ sighting, isLoading, error }) => {
 
   return (
     <div>
-      <h2>{sighting.location}</h2>
+      <h2>{removeTrailingComma(sighting.location)}</h2>
       <Map center={position} zoom={4}>
         <TileLayer
           url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
