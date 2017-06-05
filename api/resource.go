@@ -83,7 +83,7 @@ func (rs *Resource) List() http.HandlerFunc {
 			return err
 		}
 
-		return render.Render(w, r, NewPageResponse(page))
+		return render.Render(w, r, NewPageResponse(r, page))
 	})
 }
 
@@ -96,7 +96,7 @@ func (rs *Resource) Get() http.HandlerFunc {
 			return errUnprocessableEntity
 		}
 
-		return render.Render(w, r, NewSightingResponse(s))
+		return render.Render(w, r, NewSightingResponse(r, s))
 	})
 }
 

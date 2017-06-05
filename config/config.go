@@ -15,6 +15,11 @@ func init() {
 	viper.SetDefault("port", "4000")
 }
 
+const (
+	ApiVersion = "v1"
+	ApiRoot    = "/api/" + ApiVersion
+)
+
 type AppConfig struct {
 	Repo repo.Repo
 	Port string

@@ -16,7 +16,7 @@ func main() {
 
 	defer cfg.Close()
 
-	router := api.NewRouter(cfg, "/api/v1")
+	router := api.NewRouter(cfg, config.ApiRoot)
 
 	if err := http.ListenAndServe(fmt.Sprintf(":%s", cfg.Port), router); err != nil {
 		panic(err)
