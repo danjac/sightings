@@ -26,7 +26,7 @@ type Sighting struct {
 	Latitude    float64        `db:"latitude" json:"latitude"`
 	Longitude   float64        `db:"longitude" json:"longitude"`
 	TSV         sql.NullString `db:"tsv" json:"-"`
-	URL         string         `db:"-" json:"url"`
+	URL         string         `db:"-" json:"url,omitempty"`
 }
 
 // Print human-readable of sighting info
