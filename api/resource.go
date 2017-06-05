@@ -114,18 +114,6 @@ func (rs *Resource) Get() http.HandlerFunc {
 	})
 }
 
-// wraps handler so we can just return an error
-
-type errHandlerFunc func(w http.ResponseWriter, r *http.Request) error
-
-func errHandler(h errHandlerFunc) http.HandlerFunc {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if err := h(w, r); err != nil {
-			render.Render(w, r, ErrRender(err))
-		}
-	})
-}
-
 func newContext(ctx context.Context, s *models.Sighting) context.Context {
 	return context.WithValue(ctx, sightingContextKey, s)
 }
