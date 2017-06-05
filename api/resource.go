@@ -86,9 +86,15 @@ func (rs *Resource) List() http.HandlerFunc {
 
 		// assign URLs to each sighting
 
+		url := fmt.Sprintf("%s://%s%s/sightings/%%d",
+			getScheme(r),
+			r.Host,
+			rs.Api.Path,
+		)
+
 		for i, _ := range page.Sightings {
 			s := &page.Sightings[i]
-			s.URL = rs.getSightingURL(r, s)
+			s.URL = fmt.Sprintf(url, s.ID)
 		}
 
 		return render.Render(w, r, NewSightingsPageResponse(r, page))
@@ -106,16 +112,6 @@ func (rs *Resource) Get() http.HandlerFunc {
 
 		return render.Render(w, r, NewSightingResponse(s))
 	})
-}
-
-func (rs *Resource) getSightingURL(r *http.Request, s *models.Sighting) string {
-	return fmt.Sprintf(
-		"%s://%s%s/sightings/%d",
-		getScheme(r),
-		r.Host,
-		rs.Api.Path,
-		s.ID,
-	)
 }
 
 // wraps handler so we can just return an error
