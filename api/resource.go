@@ -1,7 +1,6 @@
 package api
 
 import (
-	"context"
 	"fmt"
 	"github.com/danjac/sightings/config"
 	"github.com/danjac/sightings/models"
@@ -10,8 +9,6 @@ import (
 	"net/http"
 	"strconv"
 )
-
-const sightingContextKey = "sighting"
 
 type Resource struct {
 	*config.Config
@@ -52,7 +49,7 @@ func (rs *Resource) WithSighting(next http.Handler) http.Handler {
 			return err
 		}
 
-		next.ServeHTTP(w, r.WithContext(newContext(r.Context(), s)))
+		next.ServeHTTP(w, r.WithContext(models.SightingToContext(r.Context(), s)))
 		return nil
 	})
 }
@@ -104,23 +101,10 @@ func (rs *Resource) List() http.HandlerFunc {
 func (rs *Resource) Get() http.HandlerFunc {
 	return errHandler(func(w http.ResponseWriter, r *http.Request) error {
 
-		s, ok := fromContext(r.Context())
-
-		if !ok {
-			return errUnprocessableEntity
-		}
+		s := models.SightingFromContext(r.Context())
 
 		return render.Render(w, r, NewSightingResponse(s))
 	})
-}
-
-func newContext(ctx context.Context, s *models.Sighting) context.Context {
-	return context.WithValue(ctx, sightingContextKey, s)
-}
-
-func fromContext(ctx context.Context) (*models.Sighting, bool) {
-	s, ok := ctx.Value(sightingContextKey).(*models.Sighting)
-	return s, ok
 }
 
 func getScheme(r *http.Request) string {

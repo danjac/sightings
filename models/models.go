@@ -1,11 +1,14 @@
 package models
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"strings"
 	"time"
 )
+
+const sightingContextKey = "sighting"
 
 type Page struct {
 	PageSize   int   `json:"pageSize"`
@@ -44,4 +47,12 @@ func (s *Sighting) String() string {
 		fmt.Sprintf("Duration:\t\t %s", s.Duration),
 		s.Description,
 	}, "\n")
+}
+
+func SightingToContext(ctx context.Context, s *Sighting) context.Context {
+	return context.WithValue(ctx, sightingContextKey, s)
+}
+
+func SightingFromContext(ctx context.Context) *Sighting {
+	return ctx.Value(sightingContextKey).(*Sighting)
 }
