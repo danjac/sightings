@@ -32,3 +32,6 @@ class Report(models.Model):
     occurred_at = models.DateField(null=True, blank=True)
 
     objects = ReportQuerySet.as_manager()
+
+    def __str__(self):
+        return self.location

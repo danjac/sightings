@@ -1,3 +1,17 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Report
+
+
+class ReportAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'location',
+        'shape',
+        'reported_at',
+    )
+
+    date_hierarchy = 'reported_at'
+
+
+admin.site.register(Report, ReportAdmin)

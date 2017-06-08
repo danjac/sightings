@@ -25,7 +25,9 @@ SECRET_KEY = 'j7axb+4^wy*+qcij!2277a2gb0%sbtpmw#q9zlhh^)ilth^%lf'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "172.18.0.3",
+]
 
 
 # Application definition
@@ -79,11 +81,13 @@ WSGI_APPLICATION = 'sightings.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'HOST': 'db',
+        'PORT': 5432,
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators

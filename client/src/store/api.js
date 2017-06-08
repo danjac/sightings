@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { camelizeKeys } from 'humps';
 
-const baseURL = process.env.NODE_ENV === 'production' ? '/api/' : 'http://localhost:8000/api/';
+const baseURL = process.env.NODE_ENV === 'production' ? '/api/' : 'http://172.18.0.3/api/';
 
 const transformResponse = [
   ...axios.defaults.transformResponse,
