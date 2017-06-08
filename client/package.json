@@ -5,6 +5,7 @@
   "dependencies": {
     "axios": "^0.16.1",
     "bootstrap": "^4.0.0-alpha.6",
+    "humps": "^2.0.0",
     "leaflet": "^1.0.3",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",

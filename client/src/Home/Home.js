@@ -19,9 +19,9 @@ export default (props) => {
     return <Loading />;
   }
 
-  const { sightings } = page;
+  const { results } = page;
 
-  if (!sightings || sightings.length === 0 || page.totalRows === 0) {
+  if (!results || results.length === 0 || page.count === 0) {
     return <h2>No results found</h2>;
   }
 
@@ -37,7 +37,7 @@ export default (props) => {
         </tr>
       </thead>
       <tbody>
-      {sightings.map(row => (
+      {results.map(row => (
         <tr key={row.id}>
           <td>
             <Link to={`/${row.id}`}>{moment(row.occurredAt).format('MMMM Do YYYY')}</Link>

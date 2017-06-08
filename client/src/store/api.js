@@ -1,15 +1,23 @@
 import axios from 'axios';
+import { camelizeKeys } from 'humps';
 
-const BASE_URL = process.env.NODE_ENV === 'production' ? '/api/v1/' : 'http://localhost:4000/api/v1/';
+const baseURL = process.env.NODE_ENV === 'production' ? '/api/' : 'http://localhost:8000/api/';
+
+const transformResponse = [
+  ...axios.defaults.transformResponse,
+  camelizeKeys,
+];
 
 const client = axios.create({
-  baseURL: BASE_URL,
+  baseURL,
+  transformResponse,
 });
 
+
 export const getSightings = search => {
-  return client.get(`sightings${search}`);
+  return client.get(`reports/${search}`);
 };
 
 export const getSighting = id => {
-  return client.get(`sightings/${id}`);
+  return client.get(`reports/${id}`);
 };

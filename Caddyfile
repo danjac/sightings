@@ -1,6 +1,0 @@
-localhost:2015
-
-gzip
-proxy /api localhost:4000
-
-root ./ui/build
