@@ -4,7 +4,7 @@ from django.db import models
 class ReportQuerySet(models.QuerySet):
 
     def search(self, search_term):
-        return self.filter(location__icontains=search_term)
+        return self.filter(location__search=search_term)
 
 
 class Report(models.Model):
