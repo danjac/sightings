@@ -26,7 +26,7 @@ export default ({ onSearch }) => {
   return (
     <Router>
       <Container>
-        <Container>
+        <Container className="mt-2">
           <Row>
             <Col md={2}>
               <img src={logo} height={100} width={100} alt="Ufo sightings" />

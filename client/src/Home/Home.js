@@ -33,7 +33,11 @@ export default (props) => {
 
   return (
     <div>
-      <Button disabled={!!!page.previous} onClick={fetchPrevious} block>Previous</Button>
+      <Button
+        className="mb-1"
+        disabled={!!!page.previous}
+        onClick={fetchPrevious}
+        block>Previous</Button>
       <Table striped bordered responsive>
       <thead>
         <tr>
@@ -58,7 +62,11 @@ export default (props) => {
       ))}
       </tbody>
     </Table>
-   <Button disabled={!!!page.next} onClick={fetchNext} block>Next</Button>
+   <Button
+    className="mt-1"
+    disabled={!!!page.next}
+    onClick={fetchNext}
+    block>Next</Button>
     </div>
   );
 }
