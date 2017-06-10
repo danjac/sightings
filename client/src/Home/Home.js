@@ -15,8 +15,7 @@ export default (props) => {
   const {
     page,
     isLoading,
-    onFetchNext,
-    onFetchPrevious,
+    fetchSightingsPage,
   } = props;
 
   if (!page || isLoading) {
@@ -29,9 +28,12 @@ export default (props) => {
     return <h2>No results found</h2>;
   }
 
+  const fetchNext = () => fetchSightingsPage(page.next);
+  const fetchPrevious = () => fetchSightingsPage(page.previous);
+
   return (
     <div>
-      <Button disabled={!!!page.previous} onClick={onFetchPrevious} block>Previous</Button>
+      <Button disabled={!!!page.previous} onClick={fetchPrevious} block>Previous</Button>
       <Table striped bordered responsive>
       <thead>
         <tr>
@@ -56,7 +58,7 @@ export default (props) => {
       ))}
       </tbody>
     </Table>
-   <Button disabled={!!!page.next} onClick={onFetchNext} block>Next</Button>
+   <Button disabled={!!!page.next} onClick={fetchNext} block>Next</Button>
     </div>
   );
 }
