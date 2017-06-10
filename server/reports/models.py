@@ -1,10 +1,11 @@
 from django.db import models
+from django.contrib.postgres.search import SearchVectorField
 
 
 class ReportQuerySet(models.QuerySet):
 
     def search(self, search_term):
-        return self.filter(location__search=search_term)
+        return self.filter(search_vector=search_term)
 
 
 class Report(models.Model):
@@ -30,6 +31,8 @@ class Report(models.Model):
 
     reported_at = models.DateField(null=True, blank=True)
     occurred_at = models.DateField(null=True, blank=True)
+
+    search_vector = SearchVectorField(null=True, blank=True)
 
     objects = ReportQuerySet.as_manager()
 
