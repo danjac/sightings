@@ -1,22 +1,16 @@
-import React from 'react';
+import React from "react";
 
-import moment from 'moment';
+import moment from "moment";
 
-import { Link } from 'react-router-dom';
-import { Table, Button } from 'reactstrap';
+import { Link } from "react-router-dom";
+import { Table, Button } from "reactstrap";
 
-import { removeTrailingComma } from '../utils';
+import { removeTrailingComma } from "../utils";
 
-import { Loading } from '../components';
+import { Loading } from "../components";
 
-
-export default (props) => {
-
-  const {
-    page,
-    isLoading,
-    fetchSightingsPage,
-  } = props;
+export default props => {
+  const { page, isLoading, fetchSightingsPage } = props;
 
   if (!page || isLoading) {
     return <Loading />;
@@ -37,37 +31,44 @@ export default (props) => {
         className="mb-1"
         disabled={!!!page.previous}
         onClick={fetchPrevious}
-        block>Previous</Button>
+        block
+      >
+        Previous
+      </Button>
       <Table striped bordered responsive>
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Shape</th>
-          <th>Place</th>
-        </tr>
-      </thead>
-      <tbody>
-      {results.map(row => (
-        <tr key={row.id}>
-          <td>
-            <Link to={`/${row.id}`}>{moment(row.occurredAt).format('MMMM Do YYYY')}</Link>
-          </td>
-          <td>
-            {row.shape || 'unknown'}
-          </td>
-          <td>
-            {removeTrailingComma(row.location)}
-          </td>
-        </tr>
-      ))}
-      </tbody>
-    </Table>
-   <Button
-    className="mt-1"
-    disabled={!!!page.next}
-    onClick={fetchNext}
-    block>Next</Button>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Shape</th>
+            <th>Place</th>
+          </tr>
+        </thead>
+        <tbody>
+          {results.map(row =>
+            <tr key={row.id}>
+              <td>
+                <Link to={`/${row.id}`}>
+                  {moment(row.occurredAt).format("MMMM Do YYYY")}
+                </Link>
+              </td>
+              <td>
+                {row.shape || "unknown"}
+              </td>
+              <td>
+                {removeTrailingComma(row.location)}
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </Table>
+      <Button
+        className="mt-1"
+        disabled={!!!page.next}
+        onClick={fetchNext}
+        block
+      >
+        Next
+      </Button>
     </div>
   );
-}
-
+};

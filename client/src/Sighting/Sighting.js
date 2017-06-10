@@ -1,20 +1,13 @@
-import React from 'react';
+import React from "react";
 
-import {
-  Map,
-  Marker,
-  Popup,
-  TileLayer
-} from 'react-leaflet';
+import { Map, Marker, Popup, TileLayer } from "react-leaflet";
 
+import moment from "moment";
 
-import moment from 'moment';
-
-import { removeTrailingComma } from '../utils';
-import { Loading } from '../components';
+import { removeTrailingComma } from "../utils";
+import { Loading } from "../components";
 
 export default ({ sighting, isLoading, error }) => {
-
   if (error) {
     return <h2>Sorry, an error has occurred.</h2>;
   }
@@ -29,26 +22,26 @@ export default ({ sighting, isLoading, error }) => {
       <h2>{removeTrailingComma(sighting.location)}</h2>
       <Map center={position} zoom={4}>
         <TileLayer
-          url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
-          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
+          attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
         />
         <Marker position={position}>
           <Popup>
-          <dl>
-            <dt>Date</dt>
-            <dd>{moment(sighting.occurredAt).format('MMMM Do YYYY')}</dd>
-            {sighting.duration && <dt>Duration</dt>}
-            {sighting.duration && <dd>{sighting.duration}</dd>}
-            {sighting.shape && <dt>Shape</dt>}
-            {sighting.shape && <dd>{sighting.shape}</dd>}
-          </dl>
+            <dl>
+              <dt>Date</dt>
+              <dd>{moment(sighting.occurredAt).format("MMMM Do YYYY")}</dd>
+              {sighting.duration && <dt>Duration</dt>}
+              {sighting.duration && <dd>{sighting.duration}</dd>}
+              {sighting.shape && <dt>Shape</dt>}
+              {sighting.shape && <dd>{sighting.shape}</dd>}
+            </dl>
           </Popup>
         </Marker>
       </Map>
       <blockquote
         style={{ marginTop: 20 }}
-        dangerouslySetInnerHTML={{__html: sighting.description}}
+        dangerouslySetInnerHTML={{ __html: sighting.description }}
       />
     </div>
   );
-}
+};

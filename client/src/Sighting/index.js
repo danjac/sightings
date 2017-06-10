@@ -1,15 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 
-import { fetchSighting } from '../store/actions';
+import { fetchSighting } from "../store/actions";
 
-import Sighting from './Sighting';
-
+import Sighting from "./Sighting";
 
 class Container extends Component {
-
   fetchSighting(props) {
     this.props.onFetchSighting(props.match.params.id);
   }
@@ -32,12 +30,11 @@ class Container extends Component {
 const mapStateToProps = ({ sighting }) => sighting;
 
 const mapDispatchToProps = dispatch => ({
-  onFetchSighting: (id) => {
+  onFetchSighting: id => {
     dispatch(fetchSighting(id));
-  },
+  }
 });
 
 export default withRouter(
   connect(mapStateToProps, mapDispatchToProps)(Container)
 );
-

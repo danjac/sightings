@@ -1,26 +1,17 @@
-import React from 'react';
+import React from "react";
 
-import {
-  BrowserRouter as Router,
-  Route,
-  Link,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
-
-import {
-  Container,
-  Row,
-  Col,
-} from 'reactstrap';
+import { Container, Row, Col } from "reactstrap";
 
 // import 'bootstrap/dist/css/bootstrap.css';
-import logo from '../humanoid.png';
-import './App.css';
+import logo from "../humanoid.png";
+import "./App.css";
 
-import { SearchForm } from '../components';
+import { SearchForm } from "../components";
 
-import Sighting from '../Sighting';
-import Home from '../Home';
+import Sighting from "../Sighting";
+import Home from "../Home";
 
 export default ({ onSearch }) => {
   return (
@@ -38,8 +29,8 @@ export default ({ onSearch }) => {
         </Container>
         <hr />
         <SearchForm onSubmit={onSearch} />
-      <Route exact path="/" component={Home} />
-      <Route path="/:id" component={Sighting} />
+        <Route exact path="/" component={Home} />
+        <Route path="/:id" component={Sighting} />
       </Container>
     </Router>
   );

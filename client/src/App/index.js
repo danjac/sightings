@@ -1,10 +1,9 @@
 // @flow
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import App from './App';
+import App from "./App";
 
 class Container extends Component {
-
   handleSearch: Function;
 
   constructor(props: Object) {
@@ -17,9 +16,8 @@ class Container extends Component {
   }
 
   render() {
-    return <App onSearch={this.handleSearch} />
+    return <App onSearch={this.handleSearch} />;
   }
-
 }
 
 export default Container;

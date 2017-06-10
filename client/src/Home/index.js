@@ -1,15 +1,14 @@
-import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import React, { Component } from "react";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
 
-import { withRouter } from 'react-router-dom';
+import { withRouter } from "react-router-dom";
 
-import { fetchSightings, fetchSightingsPage } from '../store/actions';
+import { fetchSightings, fetchSightingsPage } from "../store/actions";
 
-import Home from './Home';
+import Home from "./Home";
 
 class Container extends Component {
-
   componentDidMount() {
     this.fetchSightings(this.props);
   }
@@ -25,18 +24,21 @@ class Container extends Component {
   }
 
   render() {
-    return <Home {...this.props} />
+    return <Home {...this.props} />;
   }
 }
 
 const mapStateToProps = ({ sightings }) => sightings;
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-    fetchSightings,
-    fetchSightingsPage,
-  }, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      fetchSightings,
+      fetchSightingsPage
+    },
+    dispatch
+  );
 
 export default withRouter(
   connect(mapStateToProps, mapDispatchToProps)(Container)
 );
-
