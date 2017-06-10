@@ -37,13 +37,13 @@ class ReportTest(TestCase):
 class APITests(TestCase):
 
     def setUp(self):
-        self.factory = APIRequestFactory()
+        self.api_factory = APIRequestFactory()
 
     def test_fetch_all(self):
 
         ReportFactory()
 
-        request = self.factory.get("/api/reports/")
+        request = self.api_factory.get("/api/reports/")
         view = ReportViewSet.as_view({'get': 'list'})
         response = view(request)
         self.assertContains(response, 'Iowa')
@@ -53,7 +53,7 @@ class APITests(TestCase):
         ReportFactory()
         ReportFactory(location='Area 51, NM')
 
-        request = self.factory.get("/api/reports/", {"s": "Area 51"})
+        request = self.api_factory.get("/api/reports/", {"s": "Area 51"})
         view = ReportViewSet.as_view({'get': 'list'})
         response = view(request)
         self.assertContains(response, 'Area 51')
@@ -63,7 +63,7 @@ class APITests(TestCase):
 
         report = ReportFactory()
 
-        request = self.factory.get("/api/reports/%s/" % report.id)
+        request = self.api_factory.get("/api/reports/%s/" % report.id)
         view = ReportViewSet.as_view({'get': 'retrieve'})
         response = view(request, pk=report.id)
         self.assertContains(response, 'Iowa')
