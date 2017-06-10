@@ -1,4 +1,6 @@
 import csv
+import decimal
+
 import arrow
 
 from django.core.management import BaseCommand
@@ -15,16 +17,18 @@ class Command(BaseCommand):
     def parse_row_data(self, row):
         if len(row) != 9:
             return None
+        print(row)
 
         (_,
-                occurred_at,
-                reported_at,
                 location,
                 shape,
                 duration,
                 description,
                 latitude,
-                longitude) = row
+                longitude,
+                reported_at,
+                occurred_at,
+        ) = row
 
         return Report(
             occurred_at=self.parse_date(occurred_at),
@@ -38,12 +42,15 @@ class Command(BaseCommand):
         )
 
     def parse_coord(self, value):
-        return value.replace("'", "").replace('"', '')
+        try:
+            return decimal.Decimal(value.replace("'", "").replace('"', ''))
+        except decimal.InvalidOperation:
+            return None
 
     def parse_date(self, value):
         try:
-            return arrow.get(value, 'YYYYMMDD').date()
-        except arrow.ParserError:
+            return arrow.get(value, 'YYYY-MM-DD').date()
+        except (arrow.parser.ParserError, ValueError):
             return None
 
     def handle(self, *args, **options):
@@ -51,7 +58,7 @@ class Command(BaseCommand):
         filename = options['filename']
 
         try:
-            reader = csv.reader(open(filename), delimiter='\t')
+            reader = csv.reader(open(filename))
         except IOError:
             self.stderr.write(
                 self.style.ERROR('File %s could not be opened' % filename)

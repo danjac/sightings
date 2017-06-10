@@ -26,6 +26,6 @@ function* fetchSightings({ payload }) {
   }
 }
 
-export default function* rootSaga() {
+export default function* watch() {
   yield takeLatest(FETCH_SIGHTINGS_REQUEST, fetchSightings);
 }

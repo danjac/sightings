@@ -19,5 +19,5 @@ export const getSightings = search => {
 };
 
 export const getSighting = id => {
-  return client.get(`reports/${id}`);
+  return client.get(`reports/${id}/`);
 };

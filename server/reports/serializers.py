@@ -11,6 +11,7 @@ class ReportSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'location',
+            'shape',
             'description',
             'latitude',
             'longitude',
