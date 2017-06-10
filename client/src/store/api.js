@@ -18,6 +18,10 @@ export const getSightings = search => {
   return client.get(`reports/${search}`);
 };
 
+export const getSightingsPage = url => {
+  return client.get(url);
+};
+
 export const getSighting = id => {
   return client.get(`reports/${id}/`);
 };

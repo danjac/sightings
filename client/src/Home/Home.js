@@ -3,17 +3,21 @@ import React from 'react';
 import moment from 'moment';
 
 import { Link } from 'react-router-dom';
-import { Table } from 'reactstrap';
+import { Table, Button } from 'reactstrap';
 
 import { removeTrailingComma } from '../utils';
 
-import { Loading, Pager } from '../components';
-
+import { Loading } from '../components';
 
 
 export default (props) => {
 
-  const { page, isLoading } = props;
+  const {
+    page,
+    isLoading,
+    onFetchNext,
+    onFetchPrevious,
+  } = props;
 
   if (!page || isLoading) {
     return <Loading />;
@@ -27,7 +31,7 @@ export default (props) => {
 
   return (
     <div>
-      <Pager {...props} />
+      <Button disabled={!!!page.previous} onClick={onFetchPrevious} block>Previous</Button>
       <Table striped bordered responsive>
       <thead>
         <tr>
@@ -52,6 +56,7 @@ export default (props) => {
       ))}
       </tbody>
     </Table>
+   <Button disabled={!!!page.next} onClick={onFetchNext} block>Next</Button>
     </div>
   );
 }
