@@ -5,29 +5,32 @@ services:
     image: postgres
   nginx:
     image: nginx:latest
-    ports:
-      - "80:80"
+    expose:
+      - "8000"
     volumes:
       # - ./app:/app
       - ./server/config/nginx:/etc/nginx/conf.d
     depends_on:
       - web
+
   web:
     build: ./server
     command: python3 manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
     volumes:
       - ./server:/api
-    expose:
-      - "8000"
     depends_on:
       - db
+
   app:
     build: ./client
     command: bash -c "yarn && yarn start"
     volumes:
       - ./client:/app
+    ports:
+      - "3000:3000"
     expose:
       - "3000"
     depends_on:
       - nginx
-
