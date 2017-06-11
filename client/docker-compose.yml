@@ -1,0 +1,12 @@
+version: '2'
+
+services:
+  app:
+    build: .
+    command: bash -c "yarn && yarn start"
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    expose:
+      - "3000"
