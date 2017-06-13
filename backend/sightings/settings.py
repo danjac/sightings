@@ -134,4 +134,7 @@ REST_FRAMEWORK = {
 }
 
 if DEBUG:
-     CORS_ORIGIN_ALLOW_ALL = True
+
+    CORS_ORIGIN_ALLOW_ALL = True
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+

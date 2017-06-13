@@ -11,6 +11,10 @@ class ReportAdmin(admin.ModelAdmin):
         'reported_at',
     )
 
+    exclude = (
+        'search_vector',
+    )
+
     date_hierarchy = 'reported_at'
 
 
