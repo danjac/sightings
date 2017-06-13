@@ -1,13 +1,16 @@
 version: '2'
 
 services:
+
   db:
     image: postgres
 
-  web:
+  django:
     build:
       context: ./backend
-    command: python3 manage.py runserver 0.0.0.0:8000
+    command: ./wait-for-it.sh db:5432 -- python3 manage.py runserver 0.0.0.0:8000
+    expose:
+      - "8000"
     volumes:
       - ./backend:/app
     depends_on:
@@ -17,14 +20,12 @@ services:
     image: nginx:latest
     ports:
       - "8000:8000"
-    expose:
-      - "8000"
     volumes:
       - ./backend/config/nginx:/etc/nginx/conf.d
     depends_on:
-      - web
+      - django
 
-  app:
+  react:
     build:
       context: ./frontend
     command: bash -c "yarn && yarn start"
@@ -32,5 +33,5 @@ services:
       - ./frontend:/app
     ports:
       - "3000:3000"
-    expose:
-      - "3000"
+    depends_on:
+      - nginx
