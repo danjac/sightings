@@ -1,25 +1,32 @@
-import axios from "axios";
 import { camelizeKeys } from "humps";
 
-const baseURL = process.env.NODE_ENV === "production"
-  ? "/api/"
-  : "http://localhost:8000/api/";
+const baseURL = "/api/";
 
-const transformResponse = [...axios.defaults.transformResponse, camelizeKeys];
+async function doGet(url) {
 
-const client = axios.create({
-  baseURL,
-  transformResponse
-});
+  const headers = new window.Headers({
+    "Content-Type": "application/json"
+  });
+
+  const req = new window.Request(baseURL + url, {
+    method: 'GET',
+    headers
+  });
+
+  const response = await window.fetch(req);
+  const payload = await response.json();
+
+  return camelizeKeys(payload);
+}
 
 export const getSightings = search => {
-  return client.get(`reports/${search}`);
+  return doGet(`reports/${search}`);
 };
 
 export const getSightingsPage = url => {
-  return client.get(url);
+  return doGet(url);
 };
 
 export const getSighting = id => {
-  return client.get(`reports/${id}/`);
+  return doGet(`reports/${id}/`);
 };

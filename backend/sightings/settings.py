@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     "localhost",
+    "django", # from frontend docker client
 ]
 
 

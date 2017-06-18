@@ -18,7 +18,7 @@ const { fetchSightingsSuccess, fetchSightingsFailure } = createActions(
 function* fetchSightingsPage({ payload }) {
   try {
     const response = yield call(api.getSightingsPage, payload);
-    yield put(fetchSightingsSuccess(response.data));
+    yield put(fetchSightingsSuccess(response));
   } catch (e) {
     yield put(fetchSightingsFailure(e));
   }
@@ -27,7 +27,7 @@ function* fetchSightingsPage({ payload }) {
 function* fetchSightings({ payload }) {
   try {
     const response = yield call(api.getSightings, payload);
-    yield put(fetchSightingsSuccess(response.data));
+    yield put(fetchSightingsSuccess(response));
   } catch (e) {
     yield put(fetchSightingsFailure(e));
   }

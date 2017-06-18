@@ -17,7 +17,7 @@ const { fetchSightingSuccess, fetchSightingFailure } = createActions(
 export function* fetchSighting({ payload }) {
   try {
     const response = yield call(api.getSighting, payload);
-    yield put(fetchSightingSuccess(response.data));
+    yield put(fetchSightingSuccess(response));
   } catch (e) {
     yield put(fetchSightingFailure(e));
   }

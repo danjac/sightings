@@ -18,7 +18,7 @@ it("fetches a valid sighting", () => {
   const gen = fetchSighting({ payload: 100 });
 
   expect(gen.next().value).toMatchObject(call(api.getSighting, 100));
-  expect(gen.next({ data: { id: 100 } }).value).toMatchObject(put(result));
+  expect(gen.next({ id: 100 }).value).toMatchObject(put(result));
 });
 
 it("fetches an invalid sighting", () => {
