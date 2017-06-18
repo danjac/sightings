@@ -2,7 +2,7 @@
   "name": "sightings",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://django:8000",
+  "proxy": "http://nginx:8000",
   "dependencies": {
     "bootstrap": "^4.0.0-alpha.6",
     "humps": "^2.0.0",
