@@ -21,7 +21,9 @@ export const getSightings = search => {
 };
 
 export const getSightingsPage = url => {
-  return doGet(url);
+  // make sure we use the same relative URL
+  const search = url.substring(url.indexOf("?"));
+  return getSightings(search);
 };
 
 export const getSighting = id => {
