@@ -1,15 +1,12 @@
 import { camelizeKeys } from "humps";
 
-const baseURL = "/api/";
-
 async function doGet(url) {
-
   const headers = new window.Headers({
     "Content-Type": "application/json"
   });
 
-  const req = new window.Request(baseURL + url, {
-    method: 'GET',
+  const req = new window.Request(url, {
+    method: "GET",
     headers
   });
 
@@ -20,7 +17,7 @@ async function doGet(url) {
 }
 
 export const getSightings = search => {
-  return doGet(`reports/${search}`);
+  return doGet(`/api/reports/${search}`);
 };
 
 export const getSightingsPage = url => {
@@ -28,5 +25,5 @@ export const getSightingsPage = url => {
 };
 
 export const getSighting = id => {
-  return doGet(`reports/${id}/`);
+  return doGet(`/api/reports/${id}/`);
 };
