@@ -1,13 +1,11 @@
 import { camelizeKeys } from "humps";
 
 async function doGet(url) {
-  const headers = new window.Headers({
-    "Content-Type": "application/json"
-  });
-
   const req = new window.Request(url, {
     method: "GET",
-    headers
+    headers: new window.Headers({
+      "Content-Type": "application/json"
+    })
   });
 
   const response = await window.fetch(req);
@@ -21,9 +19,6 @@ export const getSightings = search => {
 };
 
 export const getSightingsPage = url => {
-  // make sure we use the same relative URL
-  // const search = url.substring(url.indexOf("?"));
-  // return getSightings(search);
   return doGet(url);
 };
 

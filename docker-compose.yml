@@ -5,6 +5,9 @@ services:
   db:
     image: postgres
 
+  redis:
+    image: redis:alpine
+
   django:
     build:
       context: ./backend
