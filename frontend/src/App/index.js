@@ -1,18 +1,16 @@
-// @flow
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 
 import App from "./App";
 
 class Container extends Component {
-  handleSearch: Function;
-
-  constructor(props: Object) {
+  constructor(props) {
     super(props);
     this.handleSearch = this.handleSearch.bind(this);
   }
 
-  handleSearch(value: string, history: Object) {
-    history.replace(`/?s=${value}`);
+  handleSearch(value: string) {
+    this.props.history.replace(`/?s=${value}`);
   }
 
   render() {
@@ -20,4 +18,4 @@ class Container extends Component {
   }
 }
 
-export default Container;
+export default withRouter(Container);

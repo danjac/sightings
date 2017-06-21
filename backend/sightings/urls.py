@@ -27,4 +27,5 @@ router.register(r'^reports', ReportViewSet, base_name='reports')
 urlpatterns = [
     url(r'^api/', include(router.urls, namespace='api')),
     url(r'^admin/', admin.site.urls),
+    url(r'^silk/', include('silk.urls', namespace='silk')),
 ]

@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 
-import { withRouter } from "react-router-dom";
-
 import { Form, FormGroup, Input } from "reactstrap";
 
 class SearchForm extends Component {
@@ -18,7 +16,7 @@ class SearchForm extends Component {
     const value = this.state.value.trim();
     if (value) {
       this.setState({ value: "" });
-      this.props.onSubmit(value, this.props.history);
+      this.props.onSubmit(value);
     }
   }
 
@@ -43,4 +41,4 @@ class SearchForm extends Component {
   }
 }
 
-export default withRouter(SearchForm);
+export default SearchForm;

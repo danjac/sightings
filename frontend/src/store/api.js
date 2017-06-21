@@ -14,14 +14,8 @@ async function doGet(url) {
   return camelizeKeys(payload);
 }
 
-export const getSightings = search => {
-  return doGet(`/api/reports/${search}`);
-};
+export const getSightings = search => doGet(`/api/reports/${search}`);
 
-export const getSightingsPage = url => {
-  return doGet(url);
-};
+export const getSightingsPage = url => doGet(url);
 
-export const getSighting = id => {
-  return doGet(`/api/reports/${id}/`);
-};
+export const getSighting = id => doGet(`/api/reports/${id}/`);
