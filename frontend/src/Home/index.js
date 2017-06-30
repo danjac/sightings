@@ -23,8 +23,26 @@ class Container extends Component {
     this.props.fetchSightings(search);
   }
 
+  fetchPage(url) {
+    url && this.props.fetchSightingsPage(url);
+  }
+
+  fetchNextPage() {
+    this.fetchPage(this.props.page.next);
+  }
+
+  fetchPreviousPage() {
+    this.fetchPage(this.props.page.previous);
+  }
+
   render() {
-    return <Home {...this.props} />;
+    return (
+      <Home
+        {...this.props}
+        fetchNextPage={this.fetchNextPage}
+        fetchPreviousPage={this.fetchPreviousPage}
+      />
+    );
   }
 }
 

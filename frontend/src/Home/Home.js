@@ -10,7 +10,7 @@ import { removeTrailingComma } from "../utils";
 import { Loading } from "../components";
 
 export default props => {
-  const { page, isLoading, fetchSightingsPage } = props;
+  const { page, isLoading, fetchNextPage, fetchPreviousPage } = props;
 
   if (!page || isLoading) {
     return <Loading />;
@@ -22,15 +22,12 @@ export default props => {
     return <h2>No results found</h2>;
   }
 
-  const fetchNext = () => fetchSightingsPage(page.next);
-  const fetchPrevious = () => fetchSightingsPage(page.previous);
-
   return (
     <div>
       <Button
         className="mb-1"
         disabled={!!!page.previous}
-        onClick={fetchPrevious}
+        onClick={fetchPreviousPage}
         block
       >
         Previous
@@ -64,7 +61,7 @@ export default props => {
       <Button
         className="mt-1"
         disabled={!!!page.next}
-        onClick={fetchNext}
+        onClick={fetchNextPage}
         block
       >
         Next
