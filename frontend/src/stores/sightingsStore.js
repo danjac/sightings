@@ -1,4 +1,4 @@
-import { extendObservable, runInAction } from "mobx";
+import { extendObservable, action, runInAction } from "mobx";
 import * as api from "./api";
 
 class SightingsStore {
@@ -8,11 +8,19 @@ class SightingsStore {
       selected: null,
       loading: false,
 
+      startLoading: action(() => {
+        this.loading = true;
+        this.error = null;
+      }),
+
+      setPage: action((page, error) => {
+        this.loading = false;
+        this.page = error ? null : page;
+        this.error = error;
+      }),
+
       fetchAll: async search => {
-        runInAction(() => {
-          this.loading = true;
-          this.error = null;
-        });
+        this.startLoading();
 
         let response, error;
 
@@ -22,18 +30,11 @@ class SightingsStore {
           error = err;
         }
 
-        runInAction(() => {
-          this.page = response;
-          this.error = error;
-          this.loading = false;
-        });
+        this.setPage(response, error);
       },
 
       fetchPage: async url => {
-        runInAction(() => {
-          this.loading = true;
-          this.error = null;
-        });
+        this.startLoading();
 
         let response, error;
 
@@ -43,18 +44,10 @@ class SightingsStore {
           error = err;
         }
 
-        runInAction(() => {
-          this.page = response;
-          this.error = error;
-          this.loading = false;
-        });
+        this.setPage(response, error);
       },
       fetchOne: async id => {
-        runInAction(() => {
-          this.loading = true;
-          this.error = null;
-          this.selected = null;
-        });
+        this.startLoading();
 
         let response, error;
 
