@@ -5,11 +5,11 @@ import Sighting from "./presenter";
 
 export default inject("sightingsStore")(
   withRouter(
-    observer(props =>
+    observer(({ sightingsStore, ...props }) =>
       <Sighting
-        onFetch={props.sightingsStore.fetchOne}
-        sighting={props.sightingsStore.selected}
-        loading={props.sightingsStore.loading}
+        onFetch={sightingsStore.fetchOne}
+        sighting={sightingsStore.selected}
+        loading={sightingsStore.loading}
         {...props}
       />
     )

@@ -5,12 +5,12 @@ import Home from "./presenter";
 
 export default inject("sightingsStore")(
   withRouter(
-    observer((props) =>
+    observer(({ sightingsStore, ...props }) =>
       <Home
-        onFetchPage={props.sightingsStore.fetchPage}
-        onFetchAll={props.sightingsStore.fetchAll}
-        loading={props.sightingsStore.loading}
-        page={props.sightingsStore.page}
+        onFetchPage={sightingsStore.fetchPage}
+        onFetchAll={sightingsStore.fetchAll}
+        loading={sightingsStore.loading}
+        page={sightingsStore.page}
         {...props}
       />
     )
