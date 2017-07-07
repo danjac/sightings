@@ -1,8 +1,11 @@
 import { extendObservable, action, runInAction } from "mobx";
-import * as api from "./api";
 
 class SightingsStore {
-  constructor() {
+
+  constructor(http) {
+
+    this.http = http;
+
     extendObservable(this, {
       page: null,
       selected: null,
@@ -25,7 +28,7 @@ class SightingsStore {
         let response, error;
 
         try {
-          response = await api.getSightings(search);
+          response = await this.http.fetch(`/api/reports/${search}`);
         } catch (err) {
           error = err;
         }
@@ -39,7 +42,7 @@ class SightingsStore {
         let response, error;
 
         try {
-          response = await api.getSightingsPage(url);
+          response = await this.http.fetch(url);
         } catch (err) {
           error = err;
         }
@@ -52,7 +55,7 @@ class SightingsStore {
         let response, error;
 
         try {
-          response = await api.getSighting(id);
+          response = await this.http.fetch(`/api/reports/${id}/`);
         } catch (err) {
           error = err;
         }
@@ -67,4 +70,4 @@ class SightingsStore {
   }
 }
 
-export default new SightingsStore();
+export default SightingsStore;
