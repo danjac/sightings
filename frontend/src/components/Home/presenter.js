@@ -5,14 +5,12 @@ import moment from "moment";
 import { Link } from "react-router-dom";
 import { Table, Button } from "reactstrap";
 
-import { removeTrailingComma } from "../utils";
+import { removeTrailingComma } from "../../utils";
 
-import { Loading } from "../components";
+import Loading from "../Loading";
 
 class Home extends Component {
-
   componentDidMount() {
-    console.log("PROPS", this.props);
     this.fetch(this.props);
   }
 

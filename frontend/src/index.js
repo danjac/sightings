@@ -4,12 +4,11 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { useStrict } from "mobx";
 import { Provider } from "mobx-react";
 import { sightingsStore } from "./stores";
-import App from "./App";
+import App from "./components/App";
 import "./index.css";
 
 useStrict(true);
 
-console.log("sightingstore:", sightingsStore);
 const stores = { sightingsStore };
 
 ReactDOM.render(

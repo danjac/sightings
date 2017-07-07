@@ -4,13 +4,12 @@ import { Map, Marker, Popup, TileLayer } from "react-leaflet";
 
 import moment from "moment";
 
-import { removeTrailingComma } from "../utils";
-import { Loading } from "../components";
+import { removeTrailingComma } from "../../utils";
+
+import Loading from "../Loading";
 
 class Sighting extends Component {
-
   fetchSighting(props) {
-    console.log("props", props.match.params.id);
     this.props.onFetch(props.match.params.id);
   }
 
@@ -25,7 +24,6 @@ class Sighting extends Component {
   }
 
   render() {
-
     const { loading, sighting, error } = this.props;
 
     if (error) {
