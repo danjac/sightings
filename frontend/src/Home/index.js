@@ -9,6 +9,13 @@ import { fetchSightings, fetchSightingsPage } from "../store/actions";
 import Home from "./Home";
 
 class Container extends Component {
+
+  constructor(props) {
+    super(props);
+    this.fetchNextPage = this.fetchNextPage.bind(this);
+    this.fetchPreviousPage = this.fetchPreviousPage.bind(this);
+  }
+
   componentDidMount() {
     this.fetchSightings(this.props);
   }
