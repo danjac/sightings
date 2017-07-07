@@ -1,18 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router } from "react-router-dom";
-import { Provider } from "react-redux";
-
+import { useStrict } from "mobx";
+import { Provider } from "mobx-react";
+import { sightingsStore } from "./stores";
 import App from "./App";
-
-import createStore from "./store";
-
 import "./index.css";
 
-const store = createStore();
+useStrict(true);
+
+console.log("sightingstore:", sightingsStore);
+const stores = { sightingsStore };
 
 ReactDOM.render(
-  <Provider store={store}>
+  <Provider {...stores}>
     <Router>
       <App />
     </Router>

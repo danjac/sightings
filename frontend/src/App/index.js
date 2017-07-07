@@ -9,7 +9,7 @@ class Container extends Component {
     this.handleSearch = this.handleSearch.bind(this);
   }
 
-  handleSearch(value: string) {
+  handleSearch(value) {
     this.props.history.replace(`/?s=${value}`);
   }
 

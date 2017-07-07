@@ -1,40 +1,17 @@
-import React, { Component } from "react";
-
-import { connect } from "react-redux";
+import React from "react";
+import { observer, inject } from "mobx-react";
 import { withRouter } from "react-router-dom";
+import Sighting from "./presenter";
 
-import { fetchSighting } from "../store/actions";
-
-import Sighting from "./Sighting";
-
-class Container extends Component {
-  fetchSighting(props) {
-    this.props.onFetchSighting(props.match.params.id);
-  }
-
-  componentDidMount() {
-    this.fetchSighting(this.props);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.match !== this.props.match) {
-      this.fetchSighting(nextProps);
-    }
-  }
-
-  render() {
-    return <Sighting {...this.props} />;
-  }
-}
-
-const mapStateToProps = ({ sighting }) => sighting;
-
-const mapDispatchToProps = dispatch => ({
-  onFetchSighting: id => {
-    dispatch(fetchSighting(id));
-  }
-});
-
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(Container)
+export default inject("sightingsStore")(
+  withRouter(
+    observer(props =>
+      <Sighting
+        onFetch={props.sightingsStore.fetchOne}
+        sighting={props.sightingsStore.selected}
+        loading={props.sightingsStore.loading}
+        {...props}
+      />
+    )
+  )
 );

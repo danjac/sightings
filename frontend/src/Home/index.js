@@ -1,62 +1,18 @@
-import React, { Component } from "react";
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
-
+import React from "react";
+import { observer, inject } from "mobx-react";
 import { withRouter } from "react-router-dom";
+import Home from "./presenter";
 
-import { fetchSightings, fetchSightingsPage } from "../store/actions";
-
-import Home from "./Home";
-
-class Container extends Component {
-  componentDidMount() {
-    this.fetchSightings(this.props);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.location !== this.props.location) {
-      this.fetchSightings(nextProps);
-    }
-  }
-
-  fetchSightings({ location: { search } }) {
-    this.props.fetchSightings(search);
-  }
-
-  fetchPage(url) {
-    url && this.props.fetchSightingsPage(url);
-  }
-
-  fetchNextPage() {
-    this.fetchPage(this.props.page.next);
-  }
-
-  fetchPreviousPage() {
-    this.fetchPage(this.props.page.previous);
-  }
-
-  render() {
-    return (
+export default inject("sightingsStore")(
+  withRouter(
+    observer((props) =>
       <Home
-        {...this.props}
-        fetchNextPage={this.fetchNextPage}
-        fetchPreviousPage={this.fetchPreviousPage}
+        onFetchPage={props.sightingsStore.fetchPage}
+        onFetchAll={props.sightingsStore.fetchAll}
+        loading={props.sightingsStore.loading}
+        page={props.sightingsStore.page}
+        {...props}
       />
-    );
-  }
-}
-
-const mapStateToProps = ({ sightings }) => sightings;
-
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(
-    {
-      fetchSightings,
-      fetchSightingsPage
-    },
-    dispatch
-  );
-
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(Container)
+    )
+  )
 );
