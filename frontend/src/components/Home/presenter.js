@@ -5,9 +5,9 @@ import moment from "moment";
 import { Link } from "react-router-dom";
 import { Table, Button } from "reactstrap";
 
-import { removeTrailingComma } from "../utils";
+import { removeTrailingComma } from "../../utils";
 
-import { Loading } from "../components";
+import Loading from "../Loading";
 
 export default props => {
   const { page, isLoading, fetchNextPage, fetchPreviousPage } = props;

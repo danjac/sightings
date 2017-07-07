@@ -4,9 +4,9 @@ import { connect } from "react-redux";
 
 import { withRouter } from "react-router-dom";
 
-import { fetchSightings, fetchSightingsPage } from "../store/actions";
+import { fetchSightings, fetchSightingsPage } from "../../store/actions";
 
-import Home from "./Home";
+import Home from "./presenter";
 
 class Container extends Component {
 

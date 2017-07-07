@@ -4,8 +4,8 @@ import { Map, Marker, Popup, TileLayer } from "react-leaflet";
 
 import moment from "moment";
 
-import { removeTrailingComma } from "../utils";
-import { Loading } from "../components";
+import { removeTrailingComma } from "../../utils";
+import Loading from "../Loading";
 
 export default ({ sighting, isLoading, error }) => {
   if (error) {

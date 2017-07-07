@@ -3,9 +3,9 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 
-import { fetchSighting } from "../store/actions";
+import { fetchSighting } from "../../store/actions";
 
-import Sighting from "./Sighting";
+import Sighting from "./presenter";
 
 class Container extends Component {
   fetchSighting(props) {

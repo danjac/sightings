@@ -4,11 +4,10 @@ import { Route, Link } from "react-router-dom";
 
 import { Container, Row, Col } from "reactstrap";
 
-import logo from "../humanoid.png";
+import logo from "./humanoid.png";
 import "./App.css";
 
-import { SearchForm } from "../components";
-
+import SearchForm from "../SearchForm";
 import Sighting from "../Sighting";
 import Home from "../Home";
 
