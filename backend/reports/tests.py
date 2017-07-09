@@ -12,10 +12,10 @@ class ReportFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Report
 
-    location="Des Moines, Iowa"
-    shape="Rectangle"
-    duration="10 mins"
-    description="..."
+    location = "Des Moines, Iowa"
+    shape = "Rectangle"
+    duration = "10 mins"
+    description = "..."
 
 
 class ReportTest(TestCase):
@@ -67,4 +67,3 @@ class APITests(TestCase):
         view = ReportViewSet.as_view({'get': 'retrieve'})
         response = view(request, pk=report.id)
         self.assertContains(response, 'Iowa')
-

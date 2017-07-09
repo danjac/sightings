@@ -20,15 +20,15 @@ class Command(BaseCommand):
         print(row)
 
         (_,
-                location,
-                shape,
-                duration,
-                description,
-                latitude,
-                longitude,
-                reported_at,
-                occurred_at,
-        ) = row
+         location,
+         shape,
+         duration,
+         description,
+         latitude,
+         longitude,
+         reported_at,
+         occurred_at,
+         ) = row
 
         return Report(
             occurred_at=self.parse_date(occurred_at),
