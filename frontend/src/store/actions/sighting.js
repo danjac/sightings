@@ -1,21 +1,21 @@
 import { createActions } from "redux-actions";
 
-import fetch from "./http";
+import fetch from "../http";
 
 import {
   FETCH_SIGHTING_REQUEST,
   FETCH_SIGHTING_SUCCESS,
   FETCH_SIGHTING_FAILURE
-} from "./types";
+} from "../types";
 
 const {
   fetchSightingRequest,
   fetchSightingSuccess,
-  fetchSightingFailure,
+  fetchSightingFailure
 } = createActions(
   FETCH_SIGHTING_REQUEST,
   FETCH_SIGHTING_SUCCESS,
-  FETCH_SIGHTING_FAILURE,
+  FETCH_SIGHTING_FAILURE
 );
 
 export const fetchSighting = id => async dispatch => {

@@ -1,12 +1,12 @@
 import { createActions } from "redux-actions";
 
-import fetch from "./http";
+import fetch from "../http";
 
 import {
   FETCH_SIGHTINGS_REQUEST,
   FETCH_SIGHTINGS_SUCCESS,
   FETCH_SIGHTINGS_FAILURE
-} from "./types";
+} from "../types";
 
 const {
   fetchSightingsRequest,
