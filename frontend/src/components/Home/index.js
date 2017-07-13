@@ -4,12 +4,11 @@ import { connect } from "react-redux";
 
 import { withRouter } from "react-router-dom";
 
-import { fetchSightings, fetchSightingsPage } from "../../store/actions";
+import { fetchSightings, searchSightings } from "../../store/actions";
 
 import Home from "./presenter";
 
 class Container extends Component {
-
   constructor(props) {
     super(props);
     this.fetchNextPage = this.fetchNextPage.bind(this);
@@ -27,11 +26,11 @@ class Container extends Component {
   }
 
   fetchSightings({ location: { search } }) {
-    this.props.fetchSightings(search);
+    this.props.searchSightings(search);
   }
 
   fetchPage(url) {
-    url && this.props.fetchSightingsPage(url);
+    url && this.props.fetchSightings(url);
   }
 
   fetchNextPage() {
@@ -59,7 +58,7 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       fetchSightings,
-      fetchSightingsPage
+      searchSightings
     },
     dispatch
   );
