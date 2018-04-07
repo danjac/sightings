@@ -12,7 +12,7 @@ services:
     build:
       context: ./backend
     environment:
-      FLASK_APP=manage.py
+      - FLASK_APP=manage.py
     command: ./wait-for-it.sh db:5432 -- pipenv run flask run
     expose:
       - "5000"
