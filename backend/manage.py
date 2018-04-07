@@ -1,4 +1,1 @@
-from sightings.app import app
-
-if __name__ == "__main__":
-    app.run()
+from sightings.app import app  # noqa

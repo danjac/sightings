@@ -13,31 +13,25 @@ services:
       context: ./backend
     environment:
       - FLASK_APP=manage.py
-    command: ./wait-for-it.sh db:5432 -- pipenv run flask run
-    expose:
-      - "5000"
+    command: ./wait-for-it.sh db:5432 -- pipenv run flask run -h 0.0.0.0 -p 5000
+    ports:
+      - "5000:5000"
     volumes:
       - ./backend:/app
     depends_on:
       - db
       - redis
 
-  nginx:
-    image: nginx:latest
-    ports:
-      - "8000:8000"
-    volumes:
-      - ./backend/config/nginx:/etc/nginx/conf.d
-    depends_on:
-      - flask
-
   vue:
     build:
       context: ./frontend
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8080
     command: bash -c "npm install && npm run dev"
     volumes:
       - ./frontend:/app
     ports:
-      - "3000:3000"
+      - "8080:8080"
     depends_on:
-      - nginx
+      - flask
