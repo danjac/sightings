@@ -8,12 +8,14 @@ services:
   redis:
     image: redis:alpine
 
-  django:
+  flask:
     build:
       context: ./backend
-    command: ./wait-for-it.sh db:5432 -- python3 manage.py runserver 0.0.0.0:8000
+    environment:
+      FLASK_APP=manage.py
+    command: ./wait-for-it.sh db:5432 -- pipenv run flask run
     expose:
-      - "8000"
+      - "5000"
     volumes:
       - ./backend:/app
     depends_on:
@@ -27,12 +29,12 @@ services:
     volumes:
       - ./backend/config/nginx:/etc/nginx/conf.d
     depends_on:
-      - django
+      - flask
 
-  react:
+  vue:
     build:
       context: ./frontend
-    command: bash -c "yarn && yarn start"
+    command: bash -c "npm install && npm run dev"
     volumes:
       - ./frontend:/app
     ports:
