@@ -22,7 +22,7 @@ def truncate_all():
 
 @pytest.fixture(scope='session')
 def flask_app():
-    app.config.from_config(TestConfig)
+    app.config.from_object(TestConfig)
     with app.app_context():
         _db.create_all()
         yield app

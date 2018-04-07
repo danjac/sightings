@@ -7,11 +7,11 @@ name = "pypi"
 pytest = "*"
 
 [packages]
-flask = "*"
-flask-sqlalchemy = "*"
+Flask = "*"
+Flask-SQLAlchemy = "*"
 flask-marshmallow = "*"
 marshmallow-sqlalchemy = "*"
-"psycopg2" = "*"
+"psycopg2-binary" = "*"
 
 [requires]
 python_version = "3.6"
