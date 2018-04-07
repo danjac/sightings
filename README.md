@@ -1,4 +1,3 @@
-
-Sample application using Django Rest Framework + PostgreSQL backend and ReactJS frontend.
+Sample application playing with Docker, Flask and VueJS.
 
 
