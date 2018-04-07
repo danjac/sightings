@@ -1,8 +1,10 @@
 <template lang="pug">
-  div#app
-    h1 testing!!!
-    img(src="./assets/logo.png")
-    router-view
+  v-app(dark)
+    v-toolbar(app clipped-left fixed)
+    v-content
+      v-container
+        router-view
+    v-footer
 </template>
 
 <script>
