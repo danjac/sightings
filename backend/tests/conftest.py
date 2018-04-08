@@ -24,13 +24,11 @@ def truncate_all():
 def flask_app():
     app.config.from_object(TestConfig)
     with app.app_context():
-        _db.create_all()
-        alembic.upgrade()
+        alembic.upgrade('heads')
         yield app
-
+        alembic.downgrade('base')
         # call this to prevent hanging
         _db.session.close()
-        _db.drop_all()
 
 
 @pytest.fixture

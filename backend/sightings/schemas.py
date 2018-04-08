@@ -17,6 +17,7 @@ class ReportSchema(ma.ModelSchema):
     class Meta:
         model = Report
         strict = True
+        exclude = ["search_vector"]
 
 
 class ReportPaginationSchema(ma.Schema):

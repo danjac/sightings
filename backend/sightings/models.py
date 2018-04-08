@@ -1,6 +1,11 @@
 from flask_sqlalchemy import SQLAlchemy
 
+from sqlalchemy_searchable import make_searchable
+from sqlalchemy_utils.types import TSVectorType
+
 db = SQLAlchemy()
+
+make_searchable(db.metadata)
 
 
 class Report(db.Model):
@@ -19,3 +24,5 @@ class Report(db.Model):
 
     reported_at = db.Column(db.DateTime, nullable=True)
     occurred_at = db.Column(db.DateTime, nullable=True)
+
+    search_vector = db.Column(TSVectorType("location", "shape", "description"))
