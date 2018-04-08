@@ -14,8 +14,8 @@ class Report(db.Model):
     duration = db.Column(db.Text, nullable=True)
     description = db.Column(db.Text, nullable=True)
 
-    latitude = db.Column(db.Numeric(precision=2), nullable=True)
-    longitude = db.Column(db.Numeric(precision=2), nullable=True)
+    latitude = db.Column(db.Numeric, nullable=True)
+    longitude = db.Column(db.Numeric, nullable=True)
 
     reported_at = db.Column(db.DateTime, nullable=True)
     occurred_at = db.Column(db.DateTime, nullable=True)
