@@ -8,7 +8,7 @@ v-data-table(
 )
   template(slot="items" slot-scope="props")
     td
-      a(href='#') {{ formatDate(props.item.occurred_at) }}
+      router-link(:to="{ name: 'ReportDetail', params: { id: props.item.id }}") {{ formatDate(props.item.occurred_at) }}
     td {{ props.item.shape }}
     td {{ props.item.location }}
 </template>

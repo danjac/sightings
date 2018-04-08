@@ -13,7 +13,6 @@ import 'vuetify/dist/vuetify.min.css'
 Vue.use(Vuetify)
 
 Vue.config.productionTip = false
-
 // TBD: configure in dev
 axios.defaults.baseURL = 'http://localhost:5000'
 
