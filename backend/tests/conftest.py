@@ -7,7 +7,7 @@ from sightings.app import db as _db
 
 class TestConfig:
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = os.environ['TEST_DATABASE_URL']
+    SQLALCHEMY_DATABASE_URI = os.environ["TEST_DATABASE_URL"]
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     DEBUG = False
 
@@ -20,7 +20,7 @@ def truncate_all():
         _db.engine.execute("truncate %s" % table)
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def flask_app():
     app.config.from_object(TestConfig)
     with app.app_context():
