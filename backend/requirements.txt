@@ -2,7 +2,7 @@ alembic==0.9.9
 arrow==0.12.1
 click==6.7
 flask-alembic==2.0.1
-flask-konch==2.0.0
+flask-konch==1.2.0
 flask-marshmallow==0.8.0
 flask-sqlalchemy==2.3.2
 flask==0.12.2
