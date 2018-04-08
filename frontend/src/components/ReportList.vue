@@ -1,46 +1,79 @@
 <template lang="pug">
-div
-  h1 "Reports go here"
-  ul(v-if="!loading")
-    li(v-for="report in reports") {{ report.location }}
-  div(v-if="loading")
-    h2 Loading....
+v-data-table(
+  :total-items="pagination.totalItems"
+  :pagination.sync="pagination"
+  :items="pagination.items"
+  :headers="headers"
+  :rows-per-page-items="[10, 20, 40]"
+)
+  template(slot="items" slot-scope="props")
+    td
+      a(href='#') {{ formatDate(props.item.occurred_at) }}
+    td {{ props.item.shape }}
+    td {{ props.item.location }}
 </template>
 
 <script>
+import moment from 'moment'
 import axios from 'axios'
 
 export default {
   data() {
     return {
-      reports: [],
-      loading: false,
-      error: false
-    }
-  },
-  created() {
-    this.fetchData()
-  },
-  methods: {
-    async fetchData() {
-      console.log('fetching data')
-      this.loading = true
-      this.error = false
-      this.reports = []
-      try {
-        const response = await axios.get('/reports/')
-        this.loading = false
-        this.reports = response.data.items
-      } catch (e) {
-        this.loading = false
-        this.error = true
-        console.log('error', e)
+      headers: [
+        {
+          text: 'Date',
+          value: 'occurred_at',
+          sortable: false
+        },
+        {
+          text: 'Shape',
+          value: 'shape',
+          sortable: false
+        },
+        {
+          text: 'Place',
+          value: 'location',
+          sortable: false
+        }
+      ],
+      pagination: {
+        loading: false,
+        page: parseInt(this.$route.page) || 1,
+        rowsPerPage: 20,
+        totalItems: 0,
+        items: [],
+        sortBy: 'occurred_at'
       }
     }
   },
-  watch: {
-    $route: 'fetchData'
-  }
+  methods: {
+    formatDate(value) {
+      return moment(value).format('MMMM Do YYYY')
+    },
+    async fetchData(params) {
+      if (this.pagination.loading) {
+        return
+      }
+      this.pagination.loading = true
 
+      const response = await axios.get('/reports/', { params })
+
+      this.pagination.items = response.data.items
+      this.pagination.totalItems = response.data.total
+      this.pagination.pages = response.data.pages
+      this.pagination.loading = false
+    }
+  },
+  watch: {
+    pagination: {
+      handler() {
+        this.fetchData({
+          page: this.pagination.page,
+          per_page: this.pagination.rowsPerPage
+        })
+      }
+    }
+  }
 }
 </script>

@@ -1,6 +1,6 @@
 <template lang="pug">
   v-app(dark)
-    v-toolbar(app clipped-left fixed)
+    v-toolbar(app fixed)
     v-content
       v-container
         router-view
