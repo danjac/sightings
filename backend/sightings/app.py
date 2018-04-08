@@ -3,6 +3,7 @@ import click
 
 from flask import Flask
 from flask_alembic import Alembic
+from flask_cors import CORS
 
 from .models import db, Report
 from .schemas import ma, ReportSchema, ReportPaginationSchema
@@ -11,6 +12,7 @@ from .import_csv import import_csv_data
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ["DATABASE_URL"]
 
+CORS(app)
 
 # DB initialization
 
@@ -47,3 +49,11 @@ def report_detail(id):
 def import_csv(filename):
     click.echo("Loading data from %s" % filename)
     import_csv_data(filename)
+
+
+@app.shell_context_processor
+def make_shell_context():
+    return {
+        'db': db,
+        'Report': Report,
+    }

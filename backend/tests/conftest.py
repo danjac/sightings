@@ -1,7 +1,7 @@
 import os
 import pytest
 
-from sightings.app import app
+from sightings.app import app, alembic
 from sightings.app import db as _db
 
 
@@ -25,6 +25,7 @@ def flask_app():
     app.config.from_object(TestConfig)
     with app.app_context():
         _db.create_all()
+        alembic.upgrade()
         yield app
 
         # call this to prevent hanging
